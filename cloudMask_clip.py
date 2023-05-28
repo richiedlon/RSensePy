@@ -7,7 +7,7 @@ from clip_withSHP_function import clipRasterSHP
 from writeRasterFunction import writeRaster
 
 os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
-locationRaster="LC08_L2SP_191027_20220720_20220726_02_T1/LC08_L2SP_191027_20220720_20220726_02_T1_QA_PIXEL.TIF"
+locationRasterQA="LC08_L2SP_191027_20220720_20220726_02_T1/LC08_L2SP_191027_20220720_20220726_02_T1_QA_PIXEL.TIF"
 shpLocation= "AOI/AOI.shp"
 outputLocation1 = "output/CloudMaskCliped.tif"
 outputLocation2 = "output/CloudMaskFull.tif"
@@ -72,9 +72,9 @@ def cloud_mask_landsat8_clip(image_path, locationSHP):
     plt.title('Cloud Mask')
     plt.colorbar()
     plt.show()    
-    return combined_mask
+    return combined_mask,resultTest[1]
 
-combined = cloud_mask_landsat8_clip(locationRaster, shpLocation)
+combined = cloud_mask_landsat8_clip(locationRasterQA, shpLocation)
 
 # print(combined.ndim)
 # print(combined.shape)
