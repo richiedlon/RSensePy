@@ -29,6 +29,8 @@ def clipRasterSHP(locationRaster,locationSHP):
 	                 "height": out_image.shape[1],
 	                 "width": out_image.shape[2],
 	                 "transform": out_transform,
+	                 "count":1,
+	                 "dtype":'float32',
 	                 "crs": CRS.from_epsg(epsg_code)})
 
 	return out_image,out_meta,epsg_code
