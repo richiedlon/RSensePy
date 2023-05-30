@@ -34,8 +34,3 @@ def clipRasterSHP(locationRaster,locationSHP):
 	                 "crs": CRS.from_epsg(epsg_code)})
 
 	return out_image,out_meta,epsg_code
-
-
-# outputLocation = "output/MaskedTest2.tif"
-# result=clipRasterSHP(L8_B10,shpLocation)
-# writeRaster(result[0],result[1],outputLocation)
