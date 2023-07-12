@@ -11,6 +11,7 @@ nir_band = geopy.b5
 # maxx, maxy = 14.076421, 48.007881
 bbox = [79.812069,6.896775,79.878330,6.967494]
 
+shpLocation1= "AOI/AOI.shp"
 shpLocation= "AOI/AOI.shp"
 outputLocation1 = "output/NDVI4.tif"
 
