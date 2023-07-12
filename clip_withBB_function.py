@@ -12,8 +12,6 @@ from rasterio.crs import CRS
 
 from writeRasterFunction import writeRaster
 
-os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
-
 def getFeatures(gdf):
     """Function to parse features from GeoDataFrame in such a manner that rasterio wants them"""
     import json
