@@ -1,46 +1,108 @@
-import rasterio 
-from rasterio import plot
-import matplotlib.pyplot as plyt
+''' 
+This script is a preliminary version of index calculation python file for my final project
+Currently contains 3 functions each implementing one index. 
+Three indices currently represented are Normalized Vegetaion Index (ndvi), Enhanced Vegetation Index (evi), Normalised Water Index (ndwi)
+
+It does not yet read the actual band values from actual imagery. It is just meant to show that the indices work.
+Therefore, you only need specify the values either directly or assigned to variables.
+
+Call the individual index functions, inputing the required args. 
+
+e.g ndvi(nir, red)
+    evi(nir, red, blue)
+    ndwi(nir, green)
+
+where,
+	red: red band of your dataset
+	nir: near infrared band of your dataset
+	blue: blue band of your dataset	
+	green: green band of your dataset
+
+Dont forget to encase this in a print statement to actually see your results.
+
+import this module to run the functions in any python enviroment
+
+'''
+
 import numpy as np
+import rasterio
+from rasterio import plot
 
 
-band4 = rasterio.open(r'relative\path\to\red\band') #red
-band5 = rasterio.open(r'relative\path\tnir\band') #nir
+# nir = 10
+# red = 5
+# blue = 2
+# green = 4
+
+##NDVI
+
+def ndvi(nir, red):
+    """args are nir (first position) and red(second position) values
+
+	Formula
+	ndvi = (nir-red)/(nir+red)
+    """
+
+    ndvi = np.where((nir+red)==0., 0, # if nir plus red gives a fraction (0.), tranfrom to 0 
+                    (nir-red)/(nir+red) #else, run this 
+                    )
+    return ndvi
 
 
-## Check data type to confirm if it is float (Landsat values are originally in integer, but we need to calcluate ndvi in float)
-
-# For band 4 
-if band4.dtypes[0] != 'float64':
-    red = band4.read(1).astype('float64') #Convert raster values from integer (int16) to float (float64)
-else:
-    red = band4.read(1)
-
-#For band 5
-if band5.dtypes[0] != 'float64':
-    nir = band5.read(1).astype('float64') #Convert raster values from integer (int16) to float (float64)
-else:
-    nir = band5.read(1)
+print(ndvi(nir, red))
 
 
-## NDVI caluclation using numpy
+##EVI
 
-ndvi = np.where((nir+red)==0., 0, # if nir plus red gives a fraction (0.), tranfrom to 0 
-                (nir-red)/(nir+red) #else, run this 
-                )
+def evi(nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5 ):
+    """args are nir (first position) and red(second position) and blue (third position) values. 
+    
+	Optional params and default values
+	G = 2.5,
+	L = 1,
+	C1 = 6,
+	C2 = 7.5,
 
-#plot.show(ndvi) #plotting the final ndvi 
+    Formula
+	G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
+    
+    """
+
+    evi = np.where((nir+red)==0., 0,
+                   G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
+                   )
+    return evi
+
+print(evi(nir, red, blue))
 
 
-## Creating a geoimage from the calculated ndvi
+##NDWI
 
-ndviImage = rasterio.open(r'opeyemi\output\ndviImage.tiff', 'w', driver='Gtiff',
-                        width= band4.width, height= band4.height, count=1, 
-                        crs= band4.crs, transform= band4.transform, dtype='float64')
+def ndwi(nir, green):
+    """args are nir (first position) and green(second position) values
 
-## Writing the image to file (writen to output folder as specifed above...this folder should be created prior to running the code)
+	Formula
+	(green - nir)/(green + nir)
+    """
 
-ndviImage.write(ndvi,1)
-ndviImage.close()
+    ndwi = np.where((nir + green)==0., 0,
+                    (green - nir)/(green + nir)
+                    )
+    return ndwi
+
+print(ndwi(nir, green))
+
+
+
+# ## Creating a geoimage from the calculated ndvi
+
+# ndviImage = rasterio.open(r'opeyemi\output\ndviImage.tiff', 'w', driver='Gtiff',
+#                         width= band4.width, height= band4.height, count=1, 
+#                         crs= band4.crs, transform= band4.transform, dtype='float64')
+
+# ## Writing the image to file (writen to output folder as specifed above...this folder should be created prior to running the code)
+
+# ndviImage.write(ndvi,1)
+# ndviImage.close()
 
 
