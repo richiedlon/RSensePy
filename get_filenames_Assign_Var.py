@@ -51,7 +51,7 @@ class L8:
 		denominator = band1 + band2
 		normDifVal = numerator / denominator
 		return normDifVal
-	#def meta_data():
+	#def meta_data()
 
 	def visualiseFunc(self, normDifVal):
 		plt.figure(figsize=(10, 10))
