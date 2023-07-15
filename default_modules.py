@@ -1,4 +1,5 @@
 import os
+import os.path
 import numpy as np
 import cv2
 from clip_withBB_function import clipRasterBB
@@ -100,6 +101,8 @@ class L8:
 
 	def NDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1 = self.b4, band2=self.b5)
+		
 
+		
 
 
