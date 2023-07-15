@@ -13,7 +13,7 @@ from fiona.crs import from_epsg
 from rasterio.crs import CRS
 from writeRasterFunction import writeRaster
 
-os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
+#os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
 
 L8_B10 = "LC08_L2SP_191027_20220720_20220726_02_T1/LC08_L2SP_191027_20220720_20220726_02_T1_ST_B10.TIF"
 shpLocation= "AOI/AOI.shp"

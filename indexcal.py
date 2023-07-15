@@ -9,17 +9,17 @@ from cloudMask_clip import cloud_mask_landsat8_clip
 from get_filenames_Assign_Var import *
 import matplotlib
 import matplotlib.pyplot as plt
-bbox = [13.490206, 48.3355,14.076421, 48.007881]
+bbox = [7.429504,10.925490,7.522202,10.981428]
 
-os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
+os.chdir('C://Users//xeon//SoftwareDevProject_ope')
 
 
-geopy = L8("LC08_L2SP_191027_20220720_20220726_02_T1")
+geopy = L8("LC09_L2SP_189053_20230412_20230414_02_T1")
 red_band = geopy.b4
 nir_band = geopy.b5
 
 shpLocation= "AOI/AOI.shp"
-outputLocation1 = "output/NDVI4.tif"
+outputLocation1 = "NDVI4.tif"
 
 
 
@@ -46,5 +46,5 @@ outputLocation1 = "output/NDVI4.tif"
 
 #geopy.norm_dif(cloud=True, save_location=outputLocation1,shp_location=shpLocation, band1= geopy.b4, band2=geopy.b5)
 #geopy.norm_dif(cloud=False, save_location=outputLocation1, bbcoord=bbox, band1= geopy.b4, band2=geopy.b5)
-geopy.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=False)
-#geopy.NDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox)
+#geopy.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=False)
+geopy.NDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
