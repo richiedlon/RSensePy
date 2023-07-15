@@ -1,4 +1,6 @@
 import os
+import os.path
+import sys
 import numpy as np
 import cv2
 from clip_withBB_function import clipRasterBB
@@ -14,10 +16,13 @@ class L8:
 		BandNum = None
 		QA_PIXEL, B1, B2, B3, B4, B5, B6, B7 = None, None,None,None,None,None,None, None
 		tif_files = []
-
-		for file in os.listdir(directory):
-			if file.endswith(".TIF"):
-				tif_files.append(file)
+		try:
+			for file in os.listdir(directory):
+				if file.endswith(".TIF"):
+					tif_files.append(file)
+		except Exception:
+			print ("Error - Image Collection directory path is invalid")
+			sys.exit()
 		for item in tif_files:
 			BandNum = item[-9:-4]
 			if BandNum=='PIXEL':
@@ -51,7 +56,7 @@ class L8:
 		denominator = band1 + band2
 		normDifVal = numerator / denominator
 		return normDifVal
-	#def meta_data():
+	#def meta_data()
 
 	def visualiseFunc(self, normDifVal):
 		plt.figure(figsize=(10, 10))
@@ -97,9 +102,11 @@ class L8:
 		if visualise==True:
 			self.visualiseFunc(normDifVal)
 
-
+	
 	def NDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1 = self.b4, band2=self.b5)
 
+
+		
 
 
