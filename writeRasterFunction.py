@@ -5,5 +5,6 @@ def writeRaster(out_img,out_meta,out_tif): # Input numpy array of the biophysica
 		with rasterio.open(out_tif, "w", **out_meta) as dest:
 			dest.write(out_img)
 	except Exception:
-		print ('Output file location does not exist')
-		sys.exit()		
+		print ("Invalid output file location")
+		sys.exit()
+
