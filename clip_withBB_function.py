@@ -1,6 +1,7 @@
 import rasterio
 from rasterio.plot import show
 import os
+import sys
 import numpy as np
 import matplotlib
 from rasterio.plot import show_hist
@@ -20,7 +21,11 @@ def getFeatures(gdf):
 def clipRasterBB(locationRaster,bbox): #Location - original raster file location and bounding box coordinates bbbox = [minx,miny,maxx,maxy]
 	Raster =rasterio.open(locationRaster) # Open raster file
 	CRSraster = Raster.crs # Get raster file coordinates
-	bbox = box(bbox[0], bbox[1], bbox[2], bbox[3]) # Define bounding box
+	try:
+		bbox = box(bbox[0], bbox[1], bbox[2], bbox[3]) # Define bounding box
+	except Exception:
+			print ("Error - Bounding box coordinates missing - 4 values needed")
+			sys.exit()
 	geo = gpd.GeoDataFrame({'geometry': bbox}, index=[0], crs=from_epsg(4326)) # Define bouding box coordinate system
 	geo = geo.to_crs(CRSraster) # Project bounding box coordinates to raster coordinate system
 	coords = getFeatures(geo) # Get bounding box coordinates in raster coordinate system

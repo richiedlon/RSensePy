@@ -2,6 +2,7 @@ import rasterio
 from rasterio.plot import show
 import os
 import numpy as np
+import sys
 import matplotlib
 from rasterio.plot import show_hist
 from rasterio.mask import mask
@@ -14,8 +15,13 @@ from rasterio.crs import CRS
 from writeRasterFunction import writeRaster
 
 def clipRasterSHP(locationRaster,locationSHP):
-	with fiona.open(locationSHP, "r") as shapefile:
-		shapes = [feature["geometry"] for feature in shapefile]	
+	try:
+		with fiona.open(locationSHP, "r") as shapefile:
+			shapes = [feature["geometry"] for feature in shapefile]
+	except fiona.errors.DriverError:
+		print ("Error - Polygon shapefile not found, please check the file path")
+		sys.exit()
+
 	with rasterio.open(locationRaster) as src:
 		out_image, out_transform = rasterio.mask.mask(src, shapes, crop=True)
 		out_meta = src.meta
