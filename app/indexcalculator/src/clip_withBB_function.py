@@ -26,17 +26,17 @@ def clipRasterBB(locationRaster,bbox): #Location - original raster file location
 	except Exception:
 			print ("Error - Bounding box coordinates missing - 4 values needed")
 			sys.exit()
-	geo = gpd.GeoDataFrame({'geometry': bbox}, index=[0], crs=from_epsg(4326)) # Define bouding box coordinate system
+	geo = gpd.GeoDataFrame({'geometry': bbox}, index=[0], crs="EPSG:4326") # Define bouding box coordinate system
 	geo = geo.to_crs(CRSraster) # Project bounding box coordinates to raster coordinate system
 	coords = getFeatures(geo) # Get bounding box coordinates in raster coordinate system
 	out_img, out_transform = mask(Raster, coords, crop=True)
 	out_meta = Raster.meta.copy() # Create a copy of the original raster file
-	epsg_code = int(Raster.crs.data['init'][5:]) # Get EPSG coordinate value only
+	#epsg_code = int(Raster.crs.data['init'][5:]) # Get EPSG coordinate value only
 	out_meta.update({"driver": "GTiff",
 				"height": out_img.shape[1], 
 				"width": out_img.shape[2], 
 				"transform": out_transform,
 				"count":1,
 				"dtype":'float32',
-				"crs": CRS.from_epsg(epsg_code)}) # Update meta data for the clipped raster
-	return out_img,out_meta,epsg_code  # Return clipped image as a numpy, meta data and epsg_code
+				"crs": CRS.from_dict(Raster.crs)}) # Update meta data for the clipped raster
+	return out_img,out_meta,Raster.crs  # Return clipped image as a numpy, meta data and epsg_code

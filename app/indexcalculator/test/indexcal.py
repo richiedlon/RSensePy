@@ -1,8 +1,8 @@
-from default_modules import *
+from src.default_modules import *
 
-os.chdir('C://Users//s1093356//OneDrive - Universität Salzburg//Documents//GitHub')
+os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
 
-geopy = L8("LC08_L2SP_142055_20230529_20230607_02_T1") # Location of the landsat Image collection folder
+geopy = L8("LC08_L2SP_191027_20220720_20220726_02_T1") # Location of the landsat Image collection folder
 red_band = geopy.b4
 nir_band = geopy.b5
 

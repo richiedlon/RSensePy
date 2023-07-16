@@ -2,7 +2,6 @@ import os
 import os.path
 import sys
 import numpy as np
-import cv2
 from clip_withBB_function import clipRasterBB
 from clip_withSHP_function import clipRasterSHP
 from writeRasterFunction import writeRaster
