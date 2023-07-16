@@ -1,15 +1,16 @@
-from src.default_modules import *
+import indexcalculator
+import os
 
 os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
 
-geopy = L8("LC08_L2SP_191027_20220720_20220726_02_T1") # Location of the landsat Image collection folder
+geopy = indexcalculator.L8("LC08_L2SP_191027_20220720_20220726_02_T1") # Location of the landsat Image collection folder
 red_band = geopy.b4
 nir_band = geopy.b5
 
 
 # minx, miny = 13.490206, 48.3355
 # maxx, maxy = 14.076421, 48.007881
-bbox = [13.490206, 48.3355,14.076421]
+bbox = [13.490206, 48.3355,14.076421,48.007881]
 
 shpLocation1= "AOI/AOI.shp"
 shpLocation= "AOI/AOI.shp"
