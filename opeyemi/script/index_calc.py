@@ -37,7 +37,9 @@ from rasterio import plot
 ##NDVI
 
 def ndvi(nir, red):
-    """args are nir (first position) and red(second position) values
+    """
+    *Normalized Difference Vegetation Index*
+    args are nir (first position) and red(second position) values
 
 	Formula
 	ndvi = (nir-red)/(nir+red)
@@ -55,7 +57,9 @@ print(ndvi(nir, red))
 ##EVI
 
 def evi(nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5 ):
-    """args are nir (first position) and red(second position) and blue (third position) values. 
+    """
+    *Enhance Vegetation Index*
+    args are nir (first position) and red(second position) and blue (third position) values. 
     
 	Optional params and default values
 	G = 2.5,
@@ -79,7 +83,10 @@ print(evi(nir, red, blue))
 ##NDWI
 
 def ndwi(nir, green):
-    """args are nir (first position) and green(second position) values
+    """
+    
+    *Normalized Difference Water Index*
+    args are nir (first position) and green(second position) values
 
 	Formula
 	(green - nir)/(green + nir)
@@ -94,6 +101,49 @@ print(ndwi(nir, green))
 
 
 
+##NBR
+
+def nbr(nir, swir):
+    """
+    *Normailized Burn Ratio*
+    args are nir (first position) and green(second position) values
+
+	Formula
+	(nir - swir)/(nir + swir)
+    """
+
+    nbr = (nir - swir)/(nir + swir)
+                    
+    return nbr
+
+print(nbr(nir, swir))
+
+
+
+##NDBI
+
+def ndbi(swir, nir):
+    """
+    *Normalized Difference Built-Up Index*
+    args are swir (first position) and nir(second position) values
+
+	Formula
+	(swir - nir)/(swir + nir)
+    
+    """
+
+    ndbi = (swir - nir)/(swir + nir)
+                    
+    return ndbi
+
+print(nbr(swir, nir))
+
+
+
+
+
+
+
 # ## Creating a geoimage from the calculated ndvi
 
 # ndviImage = rasterio.open(r'opeyemi\output\ndviImage.tiff', 'w', driver='Gtiff',
@@ -104,5 +154,4 @@ print(ndwi(nir, green))
 
 # ndviImage.write(ndvi,1)
 # ndviImage.close()
-
 
