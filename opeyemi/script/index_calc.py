@@ -45,10 +45,10 @@ def ndvi(nir, red):
 	ndvi = (nir-red)/(nir+red)
     """
 
-    ndvi = np.where((nir+red)==0., 0, # if nir plus red gives a fraction (0.), tranfrom to 0 
+    ndviVal = np.where((nir+red)==0., 0, # if nir plus red gives a fraction (0.), tranfrom to 0 
                     (nir-red)/(nir+red) #else, run this 
                     )
-    return ndvi
+    return ndviVal
 
 
 print(ndvi(nir, red))
@@ -72,10 +72,10 @@ def evi(nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5 ):
     
     """
 
-    evi = np.where((nir+red)==0., 0,
+    eviVal = np.where((nir+red)==0., 0,
                    G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
                    )
-    return evi
+    return eviVal
 
 print(evi(nir, red, blue))
 
@@ -92,10 +92,10 @@ def ndwi(nir, green):
 	(green - nir)/(green + nir)
     """
 
-    ndwi = np.where((nir + green)==0., 0,
+    ndwiVal = np.where((nir + green)==0., 0,
                     (green - nir)/(green + nir)
                     )
-    return ndwi
+    return ndwiVal
 
 print(ndwi(nir, green))
 
@@ -112,9 +112,9 @@ def nbr(nir, swir):
 	(nir - swir)/(nir + swir)
     """
 
-    nbr = (nir - swir)/(nir + swir)
+    nbrVal = (nir - swir)/(nir + swir)
                     
-    return nbr
+    return nbrVal
 
 print(nbr(nir, swir))
 
@@ -132,14 +132,109 @@ def ndbi(swir, nir):
     
     """
 
-    ndbi = (swir - nir)/(swir + nir)
+    ndbiVal = (swir - nir)/(swir + nir)
                     
-    return ndbi
+    return ndbiVal
 
 print(nbr(swir, nir))
 
 
 
+##GNDVI
+
+def gndvi(nir, green):
+    """
+    *Normalized Difference Vegetation Index*
+    args are nir (first position) and red(second position) values
+
+	Formula
+	ndvi = (nir-red)/(nir+red)
+    """
+
+    gndviVal = np.where((nir+green)==0., 0, # if nir plus green gives a fraction (0.), tranfrom to 0 
+                    (nir-green)/(nir+green) #else, run this 
+                    )
+    return gndviVal
+
+
+##GLI 
+
+def gli(green, red, blue):
+    """
+    *Green Leaf Index*
+    args are green (first position) and red(second position) and blue (thrid position) values
+
+	Formula
+	gli = (2*green - red - blue)/(2*green + red + blue)
+    """
+
+    gliVal = (2*green - red- blue)/(2*green + red + blue)
+    
+    return gliVal
+
+
+
+##SAVI
+
+def savi(nir, red, L=0.5):
+    """
+    *Soil Adjusted Vegetation Index*
+    args are nir (first position) and red(second position) values
+
+	Formula: ((1 + L) * (NIR - Red)) / (NIR + Red + L), 
+    
+    default L = 0.5
+    """
+
+    saviVal = ((1 + L) * (nir - red)) / (nir + red + L)
+
+    return saviVal
+
+
+##GSAVI
+
+def gsavi(nir, green, L=0.5):
+    """
+    * Green Soil Adjusted Vegetation Index*
+    args are nir (first position) and green(second position) values
+
+	Formula: ((1 + L) * (NIR - Green)) / (NIR + Green + L), 
+    
+    L = 0.5
+    """
+
+    gsaviVal = ((1 + L) * (nir - green)) / (nir + green + L)
+
+    return gsaviVal
+
+
+##GCI 
+
+def gci(nir, green, C=1):
+    
+    """
+    *Green Chlorophyll Index (CI-green Or GCI)*
+    args are nir (first position) and green(second position) values
+
+    Formula:  nir / green-C.
+
+    C = 1
+    """
+
+##R_ECI 
+
+def r_eci(nir, redge, C=1):
+    
+    """
+    Only for Sentinel 2
+
+    *Red-Edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
+    args are nir (first position) and redge(second position) values
+
+    Formula:  nir / redge-C.
+
+    C = 1
+    """
 
 
 

@@ -47,7 +47,7 @@ nir_band = geopy.b5
 
 
 shpLocation= "AOI/AOI.shp"
-outputLocation1 = "NBDI1.tif"
+outputLocation1 = "GNDVI1.tif"
 
 
 # minx, miny = 13.490206, 48.3355
@@ -78,4 +78,10 @@ outputLocation1 = "NBDI1.tif"
 #geopy.EVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 #geopy.NDWI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 #geopy.NBR(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.NDBI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.NDBI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.GNDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.GLI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.SAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.GSAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.GCI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+geopy.RECI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
