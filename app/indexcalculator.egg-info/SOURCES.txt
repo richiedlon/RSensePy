@@ -4,7 +4,6 @@ app/indexcalculator/__init__.py
 app/indexcalculator/clip_withBB_function.py
 app/indexcalculator/clip_withSHP_function.py
 app/indexcalculator/cloudMask_clip.py
-app/indexcalculator/indexcal.py
 app/indexcalculator/writeRasterFunction.py
 app/indexcalculator.egg-info/PKG-INFO
 app/indexcalculator.egg-info/SOURCES.txt
