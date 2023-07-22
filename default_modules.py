@@ -478,7 +478,7 @@ class L8:
 
 
 # GLI
-	def gli(green, red, blue):
+	def gli(self, green,red,blue):
 		
 		"""
 		*Green Leaf Index*
@@ -514,9 +514,9 @@ class L8:
 			gliValue = self.gli(green_clipped[0], red_clipped[0], blue_clipped[0])
 			writeRaster(gliValue,green_clipped[1],save_location)
 		elif cloud ==False and (shp_location is None):
-			green_clipped=clipRasterSHP(green,bbcoord)
-			red_clipped=clipRasterSHP(red,bbcoord)
-			blue_clipped=clipRasterSHP(blue,bbcoord)
+			green_clipped=clipRasterBB(green,bbcoord)
+			red_clipped=clipRasterBB(red,bbcoord)
+			blue_clipped=clipRasterBB(blue,bbcoord)
 			gliValue = self.gli(green_clipped[0], red_clipped[0], blue_clipped[0])
 			writeRaster(gliValue,green_clipped[1],save_location)
 		elif cloud ==True and (bbcoord is None):
@@ -531,10 +531,10 @@ class L8:
 			writeRaster(gliValue,green_clipped[1],save_location)
 			print("Writing raster completed")
 		elif cloud ==True and (shp_location is None):
-			green_clipped=clipRasterSHP(green,bbcoord)
-			red_clipped=clipRasterSHP(red,bbcoord)
-			blue_clipped=clipRasterSHP(blue,bbcoord)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,bbcoord)
+			green_clipped=clipRasterBB(green,bbcoord)
+			red_clipped=clipRasterBB(red,bbcoord)
+			blue_clipped=clipRasterBB(blue,bbcoord)
+			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
 			print("cloudMask calculation completed")
 			gliValue = self.gli(green_clipped[0], red_clipped[0], blue_clipped[0])
 			print("gliValue calculation completed")
