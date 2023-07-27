@@ -49,12 +49,17 @@ os.chdir('C://Users//xeon//SoftwareDevProject_ope')
 
 # NDBI Test
 geopy = L8("LC09_L2SP_189053_20230412_20230414_02_T1")
+# nir_band = geopy.b5
+# print(nir_band)
+print(geopy.meta())
+
+
 # geopy = L8("LC08_L2SP_191027_20220720_20220726_02_T1")
 # swir_band = geopy.b6
 # nir_band = geopy.b5
 
 # shpLocation= "AOI/AOI.shp"
-outputLocation1 = "VARI.tif"
+# outputLocation1 = "VARI.tif"
 
 
 # minx, miny = 13.490206, 48.3355
@@ -92,4 +97,4 @@ outputLocation1 = "VARI.tif"
 #geopy.GSAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 #geopy.GCI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 #geopy.RECI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.VARI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+#geopy.VARI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)

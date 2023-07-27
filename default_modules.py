@@ -50,6 +50,62 @@ class L8:
 		self.b6=directory+"//"+B6
 		self.b7=directory+"//"+B7
 
+
+	#Defining the metadata
+		basename = os.path.basename(directory) #where directory is the path to teh L8 data folder
+		namelist=[]
+
+		for i in basename.split('_'):
+			namelist.append(i)
+			
+	#Defining the individual metadata varaibles
+		mss=namelist[0]
+
+		def splitmss(mss):
+			mission=mss[0]
+			sensor=mss[1]
+			satellite=mss[2:]
+
+			return mission, sensor, satellite
+		
+		mmsR = splitmss(mss)
+
+		self.mission=mmsR[0]
+		self.sensor=mmsR[1]
+		self.satellite=mmsR[2]
+		self.corr_level=namelist[1]
+		pr=namelist[2]
+
+		def splitpr(pr):
+			path=pr[:3]
+			row=pr[3:]
+
+			return path, row
+
+		prR = splitpr(pr)
+
+		self.path=prR[0]
+		self.row=prR[1]
+		self.acqui_date=namelist[3]
+		self.process_date=namelist[4]
+		self.coll_number=namelist[5]
+		self.coll_category=namelist[6]  
+
+	# METADATA
+	def meta(self):
+		print(f"""\n
+	Mission = {self.mission}\n 
+	Sensor = {self.sensor}\n
+	Satellite= {self.satellite}\n
+	Correction Level = {self.corr_level}\n
+	Path = {self.path}\n
+	Row = {self.row}\n
+	Acquisition Date = {self.acqui_date}\n
+	Processing Data = {self.process_date}\n
+	Collection Number = {self.coll_number}\n
+	Collection Category = {self.coll_category}\n""")
+		
+
 		# NDVI
 	def normalized_difference(self, nir, red):
 

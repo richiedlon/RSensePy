@@ -2,11 +2,6 @@ import os
 import os.path
 import sys
 import numpy as np
-from clip_withBB_function import clipRasterBB
-from clip_withSHP_function import clipRasterSHP
-from writeRasterFunction import writeRaster
-from cloudMask_clip import cloud_mask_landsat8_clip
-from cloudMask_clip import cloud_mask_landsat8_clip_shp
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -16,7 +11,7 @@ import matplotlib.pyplot as plt
 class S2:
     def __init__(self, directory):
         BandNum = None
-        QA_PIXEL, B1, B2, B3, B4, B5, B6, B7 = None, None,None,None,None,None,None, None
+        QA_PIXEL, B1, B2, B3, B4, B5, B6, B7, B8A, B11, B12 = None, None, None, None, None, None, None, None, None, None
 
         directory = "C:\\Users\\xeon\\SoftwareDevProject_ope\\S2A_MSIL2A_20230715T135711_N0509_R067_T21LWD_20230715T212203.SAFE\\GRANULE\\L2A_T21LWD_A042106_20230715T140007\\IMG_DATA\\R20m"
         tif_files = []
