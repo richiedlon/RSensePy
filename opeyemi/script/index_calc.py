@@ -36,7 +36,7 @@ from rasterio import plot
 
 ##NDVI
 
-def ndvi(nir, red):
+def ndvi(self, nir, red):
     """
     *Normalized Difference Vegetation Index*
     args are nir (first position) and red(second position) values
@@ -56,7 +56,7 @@ print(ndvi(nir, red))
 
 ##EVI
 
-def evi(nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5 ):
+def evi(self, nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5 ):
     """
     *Enhance Vegetation Index*
     args are nir (first position) and red(second position) and blue (third position) values. 
@@ -82,7 +82,7 @@ print(evi(nir, red, blue))
 
 ##NDWI
 
-def ndwi(nir, green):
+def ndwi(self, nir, green):
     """
     
     *Normalized Difference Water Index*
@@ -103,7 +103,7 @@ print(ndwi(nir, green))
 
 ##NBR
 
-def nbr(nir, swir):
+def nbr(self, nir, swir):
     """
     *Normailized Burn Ratio*
     args are nir (first position) and green(second position) values
@@ -122,7 +122,7 @@ print(nbr(nir, swir))
 
 ##NDBI
 
-def ndbi(swir, nir):
+def ndbi(self, swir, nir):
     """
     *Normalized Difference Built-Up Index*
     args are swir (first position) and nir(second position) values
@@ -142,7 +142,7 @@ print(nbr(swir, nir))
 
 ##GNDVI
 
-def gndvi(nir, green):
+def gndvi(self, nir, green):
     """
     *Normalized Difference Vegetation Index*
     args are nir (first position) and red(second position) values
@@ -159,7 +159,7 @@ def gndvi(nir, green):
 
 ##GLI 
 
-def gli(green, red, blue):
+def gli(self, green, red, blue):
     """
     *Green Leaf Index*
     args are green (first position) and red(second position) and blue (thrid position) values
@@ -176,7 +176,7 @@ def gli(green, red, blue):
 
 ##SAVI
 
-def savi(nir, red, L=0.5):
+def savi(self, nir, red, L=0.5):
     """
     *Soil Adjusted Vegetation Index*
     args are nir (first position) and red(second position) values
@@ -193,7 +193,7 @@ def savi(nir, red, L=0.5):
 
 ##GSAVI
 
-def gsavi(nir, green, L=0.5):
+def gsavi(self, nir, green, L=0.5):
     """
     * Green Soil Adjusted Vegetation Index*
     args are nir (first position) and green(second position) values
@@ -210,7 +210,7 @@ def gsavi(nir, green, L=0.5):
 
 ##GCI 
 
-def gci(nir, green, C=1):
+def gci(self, nir, green, C=1):
     
     """
     *Green Chlorophyll Index (CI-green Or GCI)*
@@ -223,7 +223,7 @@ def gci(nir, green, C=1):
 
 ##R_ECI 
 
-def r_eci(nir, redge, C=1):
+def r_eci(self, nir, redge, C=1):
     
     """
     Only for Sentinel 2
@@ -234,6 +234,19 @@ def r_eci(nir, redge, C=1):
     Formula:  nir / redge-C.
 
     C = 1
+    """
+
+##VARI 
+
+def v_ari(self, green, red, blue):
+    
+    """
+  	*Visible Atmospherically Resistant Index (VARI)*
+    args are green (first position) and red (second position) and blue(third position) values
+
+    Similar to NDVI but useful when you only have RGB imagery. 
+
+    Formula:  (green-red) / (green + red - blue)
     """
 
 
