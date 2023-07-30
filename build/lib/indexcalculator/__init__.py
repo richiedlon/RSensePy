@@ -394,7 +394,7 @@ class L8:
 
 # GSAVI
 
-	def GSAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+	def GSAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None, L=0.5):
 		"""
 		*Soil Adjusted Vegetation Index*
 		args are nir (first position) and green(second position) values

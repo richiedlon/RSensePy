@@ -5,7 +5,7 @@ with open("app/README.md", "r") as f:
 
 setup(
 	name = "indexcalculator",
-	version = "0.0.4",
+	version = "0.0.5",
 	description = "Biophysical parameter calculator for Landsat 8 data",
 	package_dir ={"":"app"},
 	packages = find_packages(where="app"),
