@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: indexcalculator
+Version: 0.0.4
+Summary: Biophysical parameter calculator for Landsat 8 data
+Home-page: https://github.com/richiedlon/SoftwareDevProject
+Author: richiedlon/opeyami
+License: MIT
+Requires-Python: >=3.9.16
+Description-Content-Type: text/markdown
+
+# SoftwareDevProject
+Biophysical parameter calculation python package for Landsat 8 and 9
