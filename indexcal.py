@@ -94,3 +94,4 @@ maxx, maxy = 14.076421, 48.007881
 #geopy.GSAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 #geopy.GCI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
 #geopy.RECI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+geopy.meta()
