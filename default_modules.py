@@ -50,79 +50,117 @@ class L8:
 		self.b6=directory+"//"+B6
 		self.b7=directory+"//"+B7
 
-		# NDVI
-	def normalized_difference(self, nir, red):
 
-		"""
-		*Normalized Difference Vegetation Index*
-		args are nir (first position) and red(second position) values
+	#Defining the metadata
+		basename = os.path.basename(directory) #where directory is the path to teh L8 data folder
+		namelist=[]
 
-		Formula
-		ndvi = (nir-red)/(nir+red)
+		for i in basename.split('_'):
+			namelist.append(i)
+			
+	#Defining the individual metadata varaibles
+		mss=namelist[0]
 
-		"""
+		def splitmss(mss):
+			mission=mss[0]
+			sensor=mss[1]
+			satellite=mss[2:]
+			return mission, sensor, satellite		
+		mmsR = splitmss(mss)
+		self.mission=mmsR[0]
+		self.sensor=mmsR[1]
+		self.satellite=mmsR[2]
+		self.corr_level=namelist[1]
+		pr=namelist[2]
 
-		nir = nir.astype(np.float32)
-		red = red.astype(np.float32)
-		normDifVal = (nir - red) / (nir + red) #why the error
+		def splitpr(pr):
+			path=pr[:3]
+			row=pr[3:]
+			return path, row
+		prR = splitpr(pr)
+
+		self.path=prR[0]
+		self.row=prR[1]
+		self.acqui_date=namelist[3]
+		self.process_date=namelist[4]
+		self.coll_number=namelist[5]
+		self.coll_category=namelist[6]  
+
+	# METADATA
+	def meta(self):
+		print(f"""\n
+					Mission = {self.mission}\n 
+					Sensor = {self.sensor}\n
+					Satellite= {self.satellite}\n
+					Correction Level = {self.corr_level}\n
+					Path = {self.path}\n
+					Row = {self.row}\n
+					Acquisition Date = {self.acqui_date}\n
+					Processing Data = {self.process_date}\n
+					Collection Number = {self.coll_number}\n
+					Collection Category = {self.coll_category}\n""")
+
+
+
+	def normalized_difference(self, band1, band2):
+		band1 = band1.astype(np.float32)
+		band2 = band2.astype(np.float32)
+		numerator = band1 - band2
+		denominator = band1 + band2
+		normDifVal = numerator / denominator
 		return normDifVal
-	
+	#def meta_data()
 
-	def visualiseNDVI(self, normDifVal):
+	def visualiseFunc(self, normDifVal, title):
 		plt.figure(figsize=(10, 10))
 		plt.imshow(normDifVal.squeeze(), cmap='gray')
-		plt.title('NDVI')
+		plt.title(title)
 		plt.colorbar()
 		plt.show()
 
-		# PARAMETERIZED NDVI
-	def norm_dif(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, red=None, visualise=False):		
+	def norm_dif(self, cloud, save_location, shp_location=None, bbcoord=None, band1=None, band2=None, visualise=False, title = "Visualization of Normalized Difference"):		
 		if cloud ==False and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			red_clipped=clipRasterSHP(red,shp_location)
-			normDifVal = self.normalized_difference(nir_clipped[0], red_clipped[0])
-			writeRaster(normDifVal,nir_clipped[1],save_location)
+			band1_clipped=clipRasterSHP(band1,shp_location)
+			band2_clipped=clipRasterSHP(band2,shp_location)
+			normDifVal = self.normalized_difference(band1_clipped[0], band2_clipped[0])
+			writeRaster(normDifVal,band1_clipped[1],save_location)
 		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			red_clipped=clipRasterBB(red,bbcoord)
-			normDifVal = self.normalized_difference(nir_clipped[0], red_clipped[0])
-			writeRaster(normDifVal,nir_clipped[1],save_location)
+			band1_clipped=clipRasterBB(band1,bbcoord)
+			band2_clipped=clipRasterBB(band2,bbcoord)
+			normDifVal = self.normalized_difference(band1_clipped[0], band2_clipped[0])
+			writeRaster(normDifVal,band1_clipped[1],save_location)
 		elif cloud ==True and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			red_clipped=clipRasterSHP(red,shp_location)
+			band1_clipped=clipRasterSHP(band1,shp_location)
+			band2_clipped=clipRasterSHP(band2,shp_location)
 			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
 			print("cloudMask calculation completed")
-			normDifVal = self.normalized_difference(nir_clipped[0], red_clipped[0])
+			normDifVal = self.normalized_difference(band1_clipped[0], band2_clipped[0])
 			print("normDifVal calculation completed")
 			normDifVal = np.multiply(normDifVal,cloudMask[0])
-			writeRaster(normDifVal,nir_clipped[1],save_location)
+			writeRaster(normDifVal,band1_clipped[1],save_location)
 			print("Writing raster completed")
 		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			print("nir_clipped calculation completed")
-			red_clipped=clipRasterBB(red,bbcoord)
-			print("red_clipped calculation completed")
+			band1_clipped=clipRasterBB(band1,bbcoord)
+			print("band1_clipped calculation completed")
+			band2_clipped=clipRasterBB(band2,bbcoord)
+			print("band2_clipped calculation completed")
 			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
 			print("cloudMask calculation completed")
-			normDifVal = self.normalized_difference(nir_clipped[0], red_clipped[0])
+			normDifVal = self.normalized_difference(band1_clipped[0], band2_clipped[0])
 			print("normDifVal calculation completed")
 			normDifVal = np.multiply(normDifVal,cloudMask[0])
-			writeRaster(normDifVal,nir_clipped[1],save_location)
+			writeRaster(normDifVal,band1_clipped[1],save_location)
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseNDVI(normDifVal)
+			self.visualiseFunc(normDifVal, title)
 
-	
 	def NDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, red=self.b4)
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title="Visualization of NDVI")
 
-
-		
 
 		#EVI
-	def evi(self, nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5):
-    
+	def EVIcal(self, nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5):    
 		"""
 		*Enhance Vegetation Index*
 		args are nir (first position) and red(second position) and blue (third position) values. 
@@ -137,36 +175,32 @@ class L8:
 		G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
 
 		"""
-
+		print('reached')
 		nir = nir.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
 		eviValue = G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
 		return eviValue
-			
-	def visualiseEVI(self, eviValue):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(eviValue.squeeze(), cmap='gray')
-		plt.title('EVI')
-		plt.colorbar()
-		plt.show()
-
 
 		# PARAMETERIZED EVI
-	def evi_para(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, red=None, blue=None, G = 2.5, L = 1, C1 = 6, C2 = 7.5, visualise=False):		
+	def evi_para(self, cloud, save_location,  nir, red, blue, shp_location=None, bbcoord=None, visualise=False, title = 'Visualization of EVI Index'):		
 		if cloud ==False and (bbcoord is None):
+			print('Condition 1')
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			red_clipped=clipRasterSHP(red,shp_location)
 			blue_clipped=clipRasterSHP(blue,shp_location)
-			eviValue = self.evi(nir_clipped[0], red_clipped[0], blue_clipped[0], G, L, C1, C2)
+			#eviValue = self.normalized_difference(red_clipped[0], nir_clipped[0])
+			eviValue = self.EVIcal(nir_clipped[0], red_clipped[0], blue_clipped[0])
 			writeRaster(eviValue,red_clipped[1],save_location)
 		elif cloud ==False and (shp_location is None):
+			print('Condition 2')
 			nir_clipped=clipRasterBB(nir,bbcoord)
 			red_clipped=clipRasterBB(red,bbcoord)
 			blue_clipped=clipRasterBB(blue,bbcoord)
-			eviValue = self.evi(nir_clipped[0], red_clipped[0], blue_clipped[0], G, L, C1, C2)
+			eviValue = self.EVIcal(nir_clipped[0], red_clipped[0], blue_clipped[0])
 			writeRaster(eviValue,red_clipped[1],save_location)
 		elif cloud ==True and (bbcoord is None):
+			print('Condition 3')
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			print("nir_clipped calculation completed")
 			red_clipped=clipRasterSHP(red,shp_location)
@@ -175,106 +209,38 @@ class L8:
 			print("blue_clipped calculation completed")
 			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
 			print("cloudMask calculation completed")
-			eviValue = self.evi(nir_clipped[0], red_clipped[0], blue_clipped[0], G, L, C1, C2)
+			eviValue = self.EVIcal(nir_clipped[0], red_clipped[0], blue_clipped[0])
 			print("eviValue calculation completed")
 			eviValue = np.multiply(eviValue,cloudMask[0])
 			writeRaster(eviValue,red_clipped[1],save_location)
 			print("Writing raster completed")
 		elif cloud ==True and (shp_location is None):
+			print('Condition 4')
 			nir_clipped=clipRasterBB(nir,bbcoord)
 			print("nir_clipped calculation completed")
 			red_clipped=clipRasterBB(red,bbcoord)
-			print("_clipped calculation completed")
+			print("Red_clipped calculation completed")
 			blue_clipped=clipRasterBB(blue,bbcoord)
-			print("_clipped calculation completed")
+			print("Red_clipped calculation completed")
 			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
 			print("cloudMask calculation completed")
-			eviValue = self.evi(nir_clipped[0], red_clipped[0], blue_clipped[0], G, L, C1, C2)
+			eviValue = self.EVIcal(nir_clipped[0], red_clipped[0], blue_clipped[0])
 			print("eviValue calculation completed")
 			eviValue = np.multiply(eviValue,cloudMask[0])
 			writeRaster(eviValue,red_clipped[1],save_location)
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseEVI(eviValue)
+			self.visualiseFunc(eviValue, title)
 
 	
 	def EVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		self.evi_para(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, red=self.b4, nir=self.b5, blue=self.b2)
-
-
-		#NDWI
-	def normWaterDif(self, green, nir):
-
-		"""
-		*Normalized Difference Water Index*
-		args are nir (first position) and green(second position) values
-
-		Formula
-		(green - nir)/(green + nir)
-
-		"""
-
-		green = green.astype(np.float32)
-		nir = nir.astype(np.float32)
-		nwdValue = (green - nir) / (green + nir)
-		return nwdValue
-	
-
-	def visualiseNDWI(self, nwdValue):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(nwdValue.squeeze(), cmap='gray')
-		plt.title('NDWI')
-		plt.colorbar()
-		plt.show()
-
-		# PARAMETERIZED NDWI
-	def normWdif(self, cloud, save_location, shp_location=None, bbcoord=None, green=None, nir=None, visualise=False):		
-		if cloud ==False and (bbcoord is None):
-			green_clipped=clipRasterSHP(green,shp_location)
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			nwdValue = self.normWaterDif(green_clipped[0], nir_clipped[0])
-			writeRaster(nwdValue,green_clipped[1],save_location)
-		elif cloud ==False and (shp_location is None):
-			green_clipped=clipRasterBB(green,bbcoord)
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			nwdValue = self.normWaterDif(green_clipped[0], nir_clipped[0])
-			writeRaster(nwdValue,green_clipped[1],save_location)
-		elif cloud ==True and (bbcoord is None):
-			green_clipped=clipRasterSHP(green,shp_location)
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
-			print("cloudMask calculation completed")
-			nwdValue = self.normWaterDif(green_clipped[0], nir_clipped[0])
-			print("nwdValue calculation completed")
-			nwdValue = np.multiply(nwdValue,cloudMask[0])
-			writeRaster(nwdValue,green_clipped[1],save_location)
-			print("Writing raster completed")
-		elif cloud ==True and (shp_location is None):
-			green_clipped=clipRasterBB(green,bbcoord)
-			print("green_clipped calculation completed")
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			print("nir_clipped calculation completed")
-			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
-			print("cloudMask calculation completed")
-			nwdValue = self.normWaterDif(green_clipped[0], nir_clipped[0])
-			print("nwdValue calculation completed")
-			nwdValue = np.multiply(nwdValue,cloudMask[0])
-			writeRaster(nwdValue,green_clipped[1],save_location)
-			print("Writing raster completed")
-
-		if visualise==True:
-			self.visualiseNDWI(nwdValue)
-
 	
 	def NDWI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.normWdif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.b3, nir=self.b5)
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b3, band2=self.b5, title="Visualization of NDWI")
 
-
-
-		# NBR
-	def normBurn(self, nir, swir):
-
+	def NBR(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		"""
 		*Normailized Burn Ratio*
 		args are nir (first position) and green(second position) values
@@ -283,198 +249,30 @@ class L8:
 		(nir - swir)/(nir + swir)
 
 		"""
-
-		nir = nir.astype(np.float32)
-		swir = swir.astype(np.float32)
-		nbrValue = (nir - swir) / (nir + swir) 
-		return nbrValue
-	
-
-	def visualiseNBR(self, nbrValue):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(nbrValue.squeeze(), cmap='gray')
-		plt.title('NBR')
-		plt.colorbar()
-		plt.show()
-
-		# PARAMETERIZED NDVI
-	def normBurnRat(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, swir=None, visualise=False):		
-		if cloud ==False and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			swir_clipped=clipRasterSHP(swir,shp_location)
-			nbrValue = self.normBurn(nir_clipped[0], swir_clipped[0])
-			writeRaster(nbrValue,nir_clipped[1],save_location)
-		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			swir_clipped=clipRasterBB(swir,bbcoord)
-			nbrValue = self.normBurn(nir_clipped[0], swir_clipped[0])
-			writeRaster(nbrValue,nir_clipped[1],save_location)
-		elif cloud ==True and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			swir_clipped=clipRasterSHP(swir,shp_location)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
-			print("cloudMask calculation completed")
-			nbrValue = self.normBurn(nir_clipped[0], swir_clipped[0])
-			print("nbrValue calculation completed")
-			nbrValue = np.multiply(nbrValue,cloudMask[0])
-			writeRaster(nbrValue,nir_clipped[1],save_location)
-			print("Writing raster completed")
-		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			print("nir_clipped calculation completed")
-			swir_clipped=clipRasterBB(swir,bbcoord)
-			print("swir_clipped calculation completed")
-			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
-			print("cloudMask calculation completed")
-			nbrValue = self.normBurn(nir_clipped[0], swir_clipped[0])
-			print("nbrValue calculation completed")
-			nbrValue = np.multiply(nbrValue,cloudMask[0])
-			writeRaster(nbrValue,nir_clipped[1],save_location)
-			print("Writing raster completed")
-
-		if visualise==True:
-			self.visualiseNBR(nbrValue)
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b6, title="Visualization of NDBR")
 
 	
-	def NBR(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.normBurnRat(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, swir=self.b6)
-
-
-
-		# NDBR
-	def normBuilt(self, swir, nir):
-
+	def NDBI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		"""
 		*Normalized Difference Built-Up Index*
 		args are swir (first position) and nir(second position) values
 
 		Formula
 		(swir - nir)/(swir + nir)
-		
-		"""
-		swir = swir.astype(np.float32)
-		nir = nir.astype(np.float32)
-		nbutValue = (swir - nir) / (swir + nir) 
-		return nbutValue
-	
-
-	def visualiseNDBI(self, nbutValue):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(nbutValue.squeeze(), cmap='gray')
-		plt.title('NDBI')
-		plt.colorbar()
-		plt.show()
-
-		# PARAMETERIZED NDBI
-	def normBuiltIn(self, cloud, save_location, shp_location=None, bbcoord=None, swir=None, nir=None, visualise=False):		
-		if cloud ==False and (bbcoord is None):
-			swir_clipped=clipRasterSHP(swir,shp_location)
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			nbutValue = self.normBuilt(swir_clipped[0], nir_clipped[0])
-			writeRaster(nbutValue,swir_clipped[1],save_location)
-		elif cloud ==False and (shp_location is None):
-			swir_clipped=clipRasterBB(swir,bbcoord)
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			nbutValue = self.normBuilt(swir_clipped[0], nir_clipped[0])
-			writeRaster(nbutValue,swir_clipped[1],save_location)
-		elif cloud ==True and (bbcoord is None):
-			swir_clipped=clipRasterSHP(swir,shp_location)
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
-			print("cloudMask calculation completed")
-			nbutValue = self.normBuilt(swir_clipped[0], nir_clipped[0])
-			print("nbutValue calculation completed")
-			nbutValue = np.multiply(nbutValue,cloudMask[0])
-			writeRaster(nbutValue,swir_clipped[1],save_location)
-			print("Writing raster completed")
-		elif cloud ==True and (shp_location is None):
-			swir_clipped=clipRasterBB(swir,bbcoord)
-			print("swir_clipped calculation completed")
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			print("nir_clipped calculation completed")
-			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
-			print("cloudMask calculation completed")
-			nbutValue = self.normBuilt(swir_clipped[0], nir_clipped[0])
-			print("nbutValue calculation completed")
-			nbutValue = np.multiply(nbutValue,cloudMask[0])
-			writeRaster(nbutValue,swir_clipped[1],save_location)
-			print("Writing raster completed")
-
-		if visualise==True:
-			self.visualiseNDBI(nbutValue)
+		"""		
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b6, band2=self.b5, title ="Normalized Difference Built-Up Index")
 
 	
-	def NDBI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.normBuiltIn(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, swir=self.b6, nir=self.b5)
-
-
-# GNDVI
-	def gnormalized_difference(self, nir, green):
-
+	def GNDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		"""
 		*Green Normalized Difference Vegetation Index*
 		args are nir (first position) and green(second position) values
 
 		Formula
-		ndvi = (nir-green)/(nir+green)
+		GNDVI = (nir-green)/(nir+green)
 
 		"""
-
-		nir = nir.astype(np.float32)
-		green= green.astype(np.float32)
-		gnormDifVal = (nir - green) / (nir + green) #why the error
-		return gnormDifVal
-	
-
-	def visualiseGNDVI(self, gnormDifVal):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(gnormDifVal.squeeze(), cmap='gray')
-		plt.title('GNDVI')
-		plt.colorbar()
-		plt.show()
-
-		# PARAMETERIZED GNDVI
-	def gnorm_dif(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, green=None, visualise=False):		
-		if cloud ==False and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			green_clipped=clipRasterSHP(green,shp_location)
-			gnormDifVal = self.gnormalized_difference(nir_clipped[0], green_clipped[0])
-			writeRaster(gnormDifVal,nir_clipped[1],save_location)
-		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			green_clipped=clipRasterBB(green,bbcoord)
-			gnormDifVal = self.gnormalized_difference(nir_clipped[0], green_clipped[0])
-			writeRaster(gnormDifVal,nir_clipped[1],save_location)
-		elif cloud ==True and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			green_clipped=clipRasterSHP(green,shp_location)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
-			print("cloudMask calculation completed")
-			gnormDifVal = self.gnormalized_difference(nir_clipped[0], green_clipped[0])
-			print("gnormDifVal calculation completed")
-			gnormDifVal = np.multiply(gnormDifVal,cloudMask[0])
-			writeRaster(gnormDifVal,nir_clipped[1],save_location)
-			print("Writing raster completed")
-		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterBB(nir,bbcoord)
-			print("nir_clipped calculation completed")
-			green_clipped=clipRasterBB(green,bbcoord)
-			print("green_clipped calculation completed")
-			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
-			print("cloudMask calculation completed")
-			gnormDifVal = self.gnormalized_difference(nir_clipped[0], green_clipped[0])
-			print("gnormDifVal calculation completed")
-			gnormDifVal = np.multiply(gnormDifVal,cloudMask[0])
-			writeRaster(gnormDifVal,nir_clipped[1],save_location)
-			print("Writing raster completed")
-
-		if visualise==True:
-			self.visualiseGNDVI(gnormDifVal)
-
-	
-	def GNDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.gnorm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, green=self.b3)
-
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b3, title ="Normalized Difference Green Index")
 
 
 # GLI
@@ -497,13 +295,6 @@ class L8:
 		
 		return gliValue
 	
-
-	def visualiseGLI(self, gliValue):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(gliValue.squeeze(), cmap='gray')
-		plt.title('GLI')
-		plt.colorbar()
-		plt.show()
 
 		# PARAMETERIZED GLI
 	def gLeafIn(self, cloud, save_location, shp_location=None, bbcoord=None, green=None, red=None, blue=None, visualise=False):		
@@ -543,17 +334,69 @@ class L8:
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseGLI(gliValue)
+			self.visualiseFunc(gliValue, 'Green Leaf Index')
 
 	
 	def GLI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Green Leaf Index*
+		args are green (first position) and red(second position) and blue (thrid position) values
+
+		Formula
+		gli = (2*green - red - blue)/(2*green + red + blue)
+		"""
 		self.gLeafIn(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.b3, red=self.b4, blue=self.b2)
 
 
 
 # SAVI
-	def savi(nir, red, L=0.5):
-		
+	def savi(self, band1, band2, L=0.5):
+		band1 = band1.astype(np.float32)
+		band2 = band2.astype(np.float32)
+
+		saviVal = ((1 + L) * (band1 - band2)) / (band1 + band2 + L)
+
+		return saviVal
+
+		# PARAMETERIZED SAVI
+	def soilAvi(self, cloud, save_location, title, shp_location=None, bbcoord=None, band1=None, band2=None, L=0.5, visualise=False):		
+		if cloud ==False and (bbcoord is None):
+			band1_clipped=clipRasterSHP(band1,shp_location)
+			band2_clipped=clipRasterSHP(band2,shp_location)
+			saviVal = self.savi(band1_clipped[0], band2_clipped[0])
+			writeRaster(saviVal,band1_clipped[1],save_location)
+		elif cloud ==False and (shp_location is None):
+			band1_clipped=clipRasterBB(band1,bbcoord)
+			band2_clipped=clipRasterBB(band2,bbcoord)
+			saviVal = self.savi(band1_clipped[0], band2_clipped[0])
+			writeRaster(saviVal,band1_clipped[1],save_location)
+		elif cloud ==True and (bbcoord is None):
+			band1_clipped=clipRasterSHP(band1,shp_location)
+			band2_clipped=clipRasterSHP(band2,shp_location)
+			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
+			print("cloudMask calculation completed")
+			saviVal = self.savi(band1_clipped[0], band2_clipped[0])
+			print("saviVal calculation completed")
+			saviVal = np.multiply(saviVal,cloudMask[0])
+			writeRaster(saviVal,band1_clipped[1],save_location)
+			print("Writing raster completed")
+		elif cloud ==True and (shp_location is None):
+			band1_clipped=clipRasterBB(band1,bbcoord)
+			band2_clipped=clipRasterBB(band2,bbcoord)
+			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
+			print("cloudMask calculation completed")
+			saviVal = self.savi(band1_clipped[0], band2_clipped[0])
+			print("saviVal calculation completed")
+			saviVal = np.multiply(saviVal,cloudMask[0])
+			writeRaster(saviVal,band1_clipped[1],save_location)
+			print("Writing raster completed")
+
+		if visualise==True:
+			self.visualiseFunc(saviVal, title)
+
+	
+	def SAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+				
 		"""
 		*Soil Adjusted Vegetation Index*
 		args are nir (first position) and red(second position) values
@@ -562,65 +405,11 @@ class L8:
 
 		default L = 0.5
 		"""
-		red = red.astype(np.float32)
-		nir = nir.astype(np.float32)
-
-		saviVal = ((1 + L) * (nir - red)) / (nir + red + L)
-
-		return saviVal
-
-	def visualiseSAVI(self, saviVal):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(saviVal.squeeze(), cmap='gray')
-		plt.title('SAVI')
-		plt.colorbar()
-		plt.show()
-
-		# PARAMETERIZED SAVI
-	def soilAvi(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, red=None, L=0.5, visualise=False):		
-		if cloud ==False and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			red_clipped=clipRasterSHP(red,shp_location)
-			saviVal = self.savi(nir_clipped[0], red_clipped[0], L)
-			writeRaster(saviVal,nir_clipped[1],save_location)
-		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			red_clipped=clipRasterSHP(red,bbcoord)
-			saviVal = self.savi(nir_clipped[0], red_clipped[0], L)
-			writeRaster(saviVal,nir_clipped[1],save_location)
-		elif cloud ==True and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			red_clipped=clipRasterSHP(red,shp_location)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
-			print("cloudMask calculation completed")
-			saviVal = self.savi(nir_clipped[0], red_clipped[0], L)
-			print("saviVal calculation completed")
-			saviVal = np.multiply(saviVal,cloudMask[0])
-			writeRaster(saviVal,nir_clipped[1],save_location)
-			print("Writing raster completed")
-		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			red_clipped=clipRasterSHP(red,bbcoord)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,bbcoord)
-			print("cloudMask calculation completed")
-			saviVal = self.savi(nir_clipped[0], red_clipped[0], L)
-			print("saviVal calculation completed")
-			saviVal = np.multiply(saviVal,cloudMask[0])
-			writeRaster(saviVal,nir_clipped[1],save_location)
-			print("Writing raster completed")
-
-		if visualise==True:
-			self.visualiseSAVI(saviVal)
-
-	
-	def SAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, red=self.b4)
+		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title = 'Soil Adjusted Vegetation Index')
 
 
 
-# GSAVI
-	def gsavi(nir, green, L=0.5):
-		
+	def GSAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		"""
 		*Soil Adjusted Vegetation Index*
 		args are nir (first position) and green(second position) values
@@ -629,64 +418,13 @@ class L8:
 
 		default L = 0.5
 		"""
-		green = green.astype(np.float32)
-		nir = nir.astype(np.float32)
+		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b3, title = 'Green Soil Adjusted Vegetation Index')
 
-		gsaviVal = ((1 + L) * (nir - green)) / (nir + green + L)
-
-		return gsaviVal
-
-	def visualiseGSAVI(self, gsaviVal):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(gsaviVal.squeeze(), cmap='gray')
-		plt.title('GSAVI')
-		plt.colorbar()
-		plt.show()
-
-		# PARAMETERIZED GSAVI
-	def gsoilAvi(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, green=None, L=0.5, visualise=False):		
-		if cloud ==False and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			green_clipped=clipRasterSHP(green,shp_location)
-			gsaviVal = self.gsavi(nir_clipped[0], green_clipped[0], L)
-			writeRaster(gsaviVal,nir_clipped[1],save_location)
-		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			green_clipped=clipRasterSHP(green,bbcoord)
-			gsaviVal = self.gsavi(nir_clipped[0], green_clipped[0], L)
-			writeRaster(gsaviVal,nir_clipped[1],save_location)
-		elif cloud ==True and (bbcoord is None):
-			nir_clipped=clipRasterSHP(nir,shp_location)
-			green_clipped=clipRasterSHP(green,shp_location)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
-			print("cloudMask calculation completed")
-			gsaviVal = self.gsavi(nir_clipped[0], green_clipped[0], L)
-			print("gsaviVal calculation completed")
-			gsaviVal = np.multiply(gsaviVal,cloudMask[0])
-			writeRaster(gsaviVal,nir_clipped[1],save_location)
-			print("Writing raster completed")
-		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			green_clipped=clipRasterSHP(green,bbcoord)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,bbcoord)
-			print("cloudMask calculation completed")
-			gsaviVal = self.gsavi(nir_clipped[0], green_clipped[0], L)
-			print("gsaviVal calculation completed")
-			gsaviVal = np.multiply(gsaviVal,cloudMask[0])
-			writeRaster(gsaviVal,nir_clipped[1],save_location)
-			print("Writing raster completed")
-
-		if visualise==True:
-			self.visualiseGSAVI(gsaviVal)
-
-	
-	def GSAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.gsoilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, green=self.b4)
 
 
 
 # GCI
-	def gci(nir, green, C=1):
+	def gci(self,nir, green, C=1):
 
 		"""
 		*Green Chlorophyll Index (CI-green Or GCI)*
@@ -704,48 +442,41 @@ class L8:
 
 		return gciVal
 
-	def visualiseGCI(self, gciVal):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(gciVal.squeeze(), cmap='gray')
-		plt.title('GCI')
-		plt.colorbar()
-		plt.show()
-
 		# PARAMETERIZED GCI
 	def gChloIn(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, green=None, C=1, visualise=False):		
 		if cloud ==False and (bbcoord is None):
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			green_clipped=clipRasterSHP(green,shp_location)
-			gciVal = self.gci(nir_clipped[0], green_clipped[0], C)
+			gciVal = self.gci(nir_clipped[0], green_clipped[0])
 			writeRaster(gciVal,nir_clipped[1],save_location)
 		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			green_clipped=clipRasterSHP(green,bbcoord)
-			gciVal = self.gci(nir_clipped[0], green_clipped[0], C)
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			green_clipped=clipRasterBB(green,bbcoord)
+			gciVal = self.gci(nir_clipped[0], green_clipped[0])
 			writeRaster(gciVal,nir_clipped[1],save_location)
 		elif cloud ==True and (bbcoord is None):
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			green_clipped=clipRasterSHP(green,shp_location)
 			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
 			print("cloudMask calculation completed")
-			gciVal = self.gci(nir_clipped[0], green_clipped[0], C)
+			gciVal = self.gci(nir_clipped[0], green_clipped[0])
 			print("gciVal calculation completed")
 			gciVal = np.multiply(gciVal,cloudMask[0])
 			writeRaster(gciVal,nir_clipped[1],save_location)
 			print("Writing raster completed")
 		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			green_clipped=clipRasterSHP(green,bbcoord)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,bbcoord)
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			green_clipped=clipRasterBB(green,bbcoord)
+			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
 			print("cloudMask calculation completed")
-			gciVal = self.gci(nir_clipped[0], green_clipped[0], C)
+			gciVal = self.gci(nir_clipped[0], green_clipped[0])
 			print("gciVal calculation completed")
 			gciVal = np.multiply(gciVal,cloudMask[0])
 			writeRaster(gciVal,nir_clipped[1],save_location)
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseGCI(gciVal)
+			self.visualiseFunc(gciVal, "Visualization of Green Chlorophyll Index")
 
 	
 	def GCI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
@@ -754,7 +485,7 @@ class L8:
 
 
 # R_ECI
-	def redgeCI(nir, redge, C=1):
+	def redgeCI(self, nir, redge, C=1):
 
 		"""
 		Only for Sentinel 2 (red_edge band is only available in Sentinel 2)
@@ -768,7 +499,7 @@ class L8:
 
 		C = 1
 		"""
-   
+
 		nir = nir.astype(np.float32)
 		redge = redge.astype(np.float32)
 
@@ -776,48 +507,42 @@ class L8:
 
 		return reCiVal
 
-	def visualiseRECI(self, reCiVal):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(reCiVal.squeeze(), cmap='gray')
-		plt.title('Red-Edge CI')
-		plt.colorbar()
-		plt.show()
 
 		# PARAMETERIZED R_ECI
 	def reCInd(self, cloud, save_location, shp_location=None, bbcoord=None, nir=None, redge=None, C=1, visualise=False):		
 		if cloud ==False and (bbcoord is None):
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			redge_clipped=clipRasterSHP(redge,shp_location)
-			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0], C)
+			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0])
 			writeRaster(reCiVal,nir_clipped[1],save_location)
 		elif cloud ==False and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			redge_clipped=clipRasterSHP(redge,bbcoord)
-			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0], C)
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			redge_clipped=clipRasterBB(redge,bbcoord)
+			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0])
 			writeRaster(reCiVal,nir_clipped[1],save_location)
 		elif cloud ==True and (bbcoord is None):
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			redge_clipped=clipRasterSHP(redge,shp_location)
 			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,shp_location)
 			print("cloudMask calculation completed")
-			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0], C)
+			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0])
 			print("reCiVal calculation completed")
 			reCiVal = np.multiply(reCiVal,cloudMask[0])
 			writeRaster(reCiVal,nir_clipped[1],save_location)
 			print("Writing raster completed")
 		elif cloud ==True and (shp_location is None):
-			nir_clipped=clipRasterSHP(nir,bbcoord)
-			redge_clipped=clipRasterSHP(redge,bbcoord)
-			cloudMask = cloud_mask_landsat8_clip_shp(self.qa_pixel,bbcoord)
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			redge_clipped=clipRasterBB(redge,bbcoord)
+			cloudMask = cloud_mask_landsat8_clip(self.qa_pixel,bbcoord)
 			print("cloudMask calculation completed")
-			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0], C)
+			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0])
 			print("reCiVal calculation completed")
 			reCiVal = np.multiply(reCiVal,cloudMask[0])
 			writeRaster(reCiVal,nir_clipped[1],save_location)
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseRECI(reCiVal)
+			self.visualiseFunc(reCiVal, "Visualization of Red-edge Chlorophyll Index")
 
 	
 	def RECI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
