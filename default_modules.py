@@ -91,7 +91,7 @@ class L8:
 		self.coll_number=namelist[5]
 		self.coll_category=namelist[6]  
 
-	# METADATA
+		# METADATA
 	def meta(self):
 		print(f"""\n
 	Mission = {self.mission}\n 
