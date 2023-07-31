@@ -2,9 +2,9 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import rasterio
-from indexcalculator.clip_withBB_function import clipRasterBB
-from indexcalculator.clip_withSHP_function import clipRasterSHP
-from indexcalculator.writeRasterFunction import writeRaster
+from RSensePy.clip_withBB_function import clipRasterBB
+from RSensePy.clip_withSHP_function import clipRasterSHP
+from RSensePy.writeRasterFunction import writeRaster
 def cloud_mask_landsat8_clip_shp(image_path, locationSHP):
     resultTest=clipRasterSHP(image_path,locationSHP)
     qa_bandTest = resultTest[0]

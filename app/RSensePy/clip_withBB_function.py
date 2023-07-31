@@ -11,7 +11,7 @@ import geopandas as gpd
 from fiona.crs import from_epsg
 from rasterio.crs import CRS
 
-from indexcalculator.writeRasterFunction import writeRaster
+from RSensePy.writeRasterFunction import writeRaster
 
 def getFeatures(gdf):
     """Function to parse features from GeoDataFrame in such a manner that rasterio wants them"""

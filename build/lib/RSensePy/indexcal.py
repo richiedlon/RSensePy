@@ -1,9 +1,9 @@
-import indexcalculator
+import RSensePy
 import os
 
 os.chdir('C://Studies//Copernicus Program//1_Semester 2//Software development practice//Final project')
 
-geopy = indexcalculator.L8("LC08_L2SP_191027_20220720_20220726_02_T1") # Location of the landsat Image collection folder
+geopy = RSensePy.L8("LC08_L2SP_191027_20220720_20220726_02_T1") # Location of the landsat Image collection folder
 red_band = geopy.b4
 nir_band = geopy.b5
 

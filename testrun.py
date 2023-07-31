@@ -1,4 +1,4 @@
-import app.indexcalculator as ic
+import app.RSensePy as ic
 import os
 
 # bbox = [7.429504,10.925490,7.522202,10.981428]
@@ -21,23 +21,23 @@ geopy = ic.L8("LC08_L2SP_191027_20220720_20220726_02_T1")
 print(geopy.meta())
 
 
-geopy.norm_dif(cloud=True, save_location=outputLocation1,shp_location=shpLocation, band1= geopy.b4, band2=geopy.b5, visualise=True)
-geopy.norm_dif(cloud=True, save_location=outputLocation1, bbcoord=bbox, band1= geopy.b4, band2=geopy.b5, visualise=True)
-geopy.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
-geopy.NDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+# geopy.norm_dif(cloud=True, save_location=outputLocation1,shp_location=shpLocation, band1= geopy.b4, band2=geopy.b5, visualise=True)
+# geopy.norm_dif(cloud=True, save_location=outputLocation1, bbcoord=bbox, band1= geopy.b4, band2=geopy.b5, visualise=True)
+# geopy.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.NDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 
-geopy.EVI(cloud=False, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
-geopy.EVI(cloud=False, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.NDWI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.EVI(cloud=False, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.EVI(cloud=False, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+# geopy.NDWI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
 
-geopy.NBR(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
-geopy.NDBI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.GNDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.GLI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
-geopy.SAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.GSAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
-geopy.GCI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
-geopy.RECI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.NBR(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.NDBI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+# geopy.GNDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+# geopy.GLI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.SAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+# geopy.GSAVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+# geopy.GCI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
+# geopy.RECI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
 geopy.VARI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=True)
 geopy.meta()
 

@@ -2,11 +2,11 @@ import os
 import os.path
 import sys
 import numpy as np
-from indexcalculator.clip_withBB_function import clipRasterBB
-from indexcalculator.clip_withSHP_function import clipRasterSHP
-from indexcalculator.writeRasterFunction import writeRaster
-from indexcalculator.cloudMask_clip import cloud_mask_landsat8_clip
-from indexcalculator.cloudMask_clip import cloud_mask_landsat8_clip_shp
+from RSensePy.clip_withBB_function import clipRasterBB
+from RSensePy.clip_withSHP_function import clipRasterSHP
+from RSensePy.writeRasterFunction import writeRaster
+from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip
+from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip_shp
 import matplotlib
 import matplotlib.pyplot as plt
 

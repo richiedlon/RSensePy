@@ -11,7 +11,7 @@ import geopandas as gpd
 import fiona
 from fiona.crs import from_epsg
 from rasterio.crs import CRS
-from indexcalculator.writeRasterFunction import writeRaster
+from RSensePy.writeRasterFunction import writeRaster
 
 def clipRasterSHP(locationRaster,locationSHP):
 	try:
