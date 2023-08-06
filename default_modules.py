@@ -51,7 +51,7 @@ class L8:
 		self.b7=directory+"//"+B7
 
 	#Defining the metadata
-		basename = os.path.basename(directory) #where directory is the path to teh L8 data folder
+		basename = os.path.basename(directory) #where directory is the path to the L8 data folder
 		namelist=[]
 
 		for i in basename.split('_'):
@@ -477,8 +477,6 @@ class L8:
 
 		"""
 		Only for Sentinel 2 (red_edge band is only available in Sentinel 2)
-
-		##rework reCI 
 
 		*Red-edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
 		args are nir (first position) and redge(second position) values
