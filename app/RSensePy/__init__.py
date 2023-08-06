@@ -160,7 +160,7 @@ class L8:
 					Collection Number = {self.coll_number}\n
 					Collection Category = {self.coll_category}\n""")
 
-### Defining Indices for Landsat 8 processing
+	### Defining Indices for Landsat 8 processing
 
 	def normalized_difference(self, band1, band2):
 		band1 = band1.astype(np.float32)
@@ -661,46 +661,69 @@ class L8:
 ### Defining Sentinel 2 class and accompanying methods
 
 class S2:
-	def __init__(self,directory):
+	def __init__(self, directory):
 		BandNum = None
-		QA_PIXEL, B1, B2, B3, B4, B5, B6, B7 = None, None,None,None,None,None,None, None
+		QA_PIXEL, B1, B2, B3, B4, B5, B6, B7, B8A, B11, B12 = None, None, None, None, None, None, None, None, None, None
+		
 		tif_files = []
+
 		try:
 			for file in os.listdir(directory):
-				if file.endswith(".TIF"):
+				if file.endswith(".jp2"):
 					tif_files.append(file)
 		except Exception:
-			print ("Error - Image Collection directory path is invalid")
+			print("Image Collection directory path is invalid")
 			sys.exit()
+
+		print(tif_files)
+
+		# assign the appropriate files to their respective band variables
+
 		for item in tif_files:
-			BandNum = item[-9:-4]
-			if BandNum=='PIXEL':
-				QA_PIXEL =item
-			elif BandNum=='SR_B1':
+			BandNum = item[-11:-8]
+			if BandNum == "BO1":
 				B1=item
-			elif BandNum=='SR_B2':
+			elif BandNum=='BO2':
 				B2=item
-			elif BandNum=='SR_B3':
+			elif BandNum=='BO3':
 				B3=item
-			elif BandNum=='SR_B4':
+			elif BandNum=='BO4':
 				B4=item
-			elif BandNum=='SR_B5':
+			elif BandNum=='BO5':
 				B5=item
-			elif BandNum=='SR_B6':
+			elif BandNum=='BO6':
 				B6=item
-			elif BandNum=='SR_B7':
+			elif BandNum=='BO7':
 				B7=item
-		self.qa_pixel=directory+"//"+QA_PIXEL
-		self.b1=directory+"//"+B1
-		self.b2=directory+"//"+B2
-		self.b3=directory+"//"+B3
-		self.b4=directory+"//"+B4
-		self.b5=directory+"//"+B5
-		self.b6=directory+"//"+B6
-		self.b7=directory+"//"+B7
+			elif BandNum=='B8A':
+				B8A=item
+			elif BandNum=='B11':
+				B11=item
+			elif BandNum=='B12':
+				B12=item
+			elif BandNum=='SCL':
+				SCL=item
+			elif BandNum=='TCI':
+				TCI=item
+			elif BandNum=='WVP':
+				WVP=item
+
+		self.B1= directory+"\\"+B1
+		self.B2= directory+"\\"+B2
+		self.B3= directory+"\\"+B3
+		self.B4= directory+"\\"+B4
+		self.B5= directory+"\\"+B5
+		self.B6= directory+"\\"+B6
+		self.B7= directory+"\\"+B7
+		self.B8A= directory+"\\"+B8A
+		self.B11= directory+"\\"+B11
+		self.B12= directory+"\\"+B12
+		self.SCL= directory+"\\"+SCL
+		self.TCI= directory+"\\"+TCI
+		self.WVP= directory+"\\"+WVP
 
 	#Defining the metadata
-		basename = os.path.basename(directory) #where directory is the path to teh L8 data folder
+		basename = os.path.basename(directory) #where directory is the path to the S2 data folder
 		namelist=[]
 
 		for i in basename.split('_'):
