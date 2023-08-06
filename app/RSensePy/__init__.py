@@ -15,7 +15,7 @@ def selectsensor():
     answer= input("""
 Hello there!
 Welcome to RsensePy, your handy tool to compute a diverse range of optical remote-sensing based indices hitch free!
-Please note that RsensePy currently surpports level 2A (surface reflectance) Landsat 8 and Sentinel 2 imagery only.
+Please note that RsensePy currently surpports level 2A (surface reflectance) Landsat 8 and Sentinel 2 (20m) imagery only.
 Select your satellite type below to get a list of available satellite-specific indices on RsensePy.
 
 What imagery are you working with today? 
@@ -50,6 +50,7 @@ Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery.
         Green Soild Adjusted Vegetation Index(GSAVI)
         Green Chlorophyll Index(GCI)
         Red-Edge Chlorophyll Index(ReCI)
+	    Normalized Difference Red-Edge (NDRE)
         Visible Atmospherically Resistant Index (VARI)
               """)
     else: 
@@ -160,7 +161,9 @@ class L8:
 					Collection Number = {self.coll_number}\n
 					Collection Category = {self.coll_category}\n""")
 
-	### Defining Indices for Landsat 8 processing
+	
+	
+	### DEFINING INDICES FOR LANDSAT 8
 
 	def normalized_difference(self, band1, band2):
 		band1 = band1.astype(np.float32)
@@ -214,26 +217,21 @@ class L8:
 		if visualise==True:
 			self.visualiseFunc(normDifVal, title)
 
+		#NDVI
 	def NDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title="Normalized Difference Vegetation Index")
+		"""
+		*Normalized Difference Vegetation Index*
+		args are nir (first position) and red(second position) values
 
+		Formula
+		ndvi = (nir-red)/(nir+red)
+
+		"""
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title="Normalized Difference Vegetation Index")
+		
 
 		#EVI
 	def EVIcal(self, nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5):    
-		"""
-		*Enhance Vegetation Index*
-		args are nir (first position) and red(second position) and blue (third position) values. 
-		
-		Optional params and default values
-		G = 2.5,
-		L = 1,
-		C1 = 6,
-		C2 = 7.5,
-
-		Formula
-		G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
-
-		"""
 		nir = nir.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
@@ -289,9 +287,31 @@ class L8:
 
 	
 	def EVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Enhance Vegetation Index (EVI)*
+		args are nir (first position) and red(second position) and blue (third position) values. 
+		
+		Optional params and default values
+		G = 2.5,
+		L = 1,
+		C1 = 6,
+		C2 = 7.5,
+
+		Formula
+		G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
+
+		"""
 		self.evi_para(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, red=self.b4, nir=self.b5, blue=self.b2)
 	
 	def NDWI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Normalized Difference Water Index (NDWI)*
+		args are nir (first position) and green(second position) values
+
+		Formula
+		(green - nir)/(green + nir)
+
+		"""
 		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b3, band2=self.b5, title="Normalized Difference Water Index")
 
 	def NBR(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
@@ -332,15 +352,6 @@ class L8:
 # GLI
 	def gli(self, green,red,blue):
 		
-		"""
-		*Green Leaf Index*
-		args are green (first position) and red(second position) and blue (thrid position) values
-
-		Formula
-		gli = (2*green - red - blue)/(2*green + red + blue)
-		
-		"""
-
 		green = green.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
@@ -450,6 +461,14 @@ class L8:
 
 	
 	def SAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Soil Adjusted Vegetation Index (SAVI)*
+		args are nir (first position) and red(second position) values
+
+		Formula: ((1 + L) * (NIR - Red)) / (NIR + Red + L), 
+
+		default L = 0.5
+		"""
 		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title = 'Soil Adjusted Vegetation Index')
 
 
@@ -458,31 +477,20 @@ class L8:
 
 	def GSAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None, L=0.5):
 		"""
-		*Soil Adjusted Vegetation Index*
+		*Green Soil Adjusted Vegetation Index (G-SAVI)*
 		args are nir (first position) and green(second position) values
 
-		Formula: ((1 + L) * (NIR - green)) / (NIR + green + L), 
+		Formula: ((1 + L) * (NIR - green)) / (NIR + green + L) 
 
 		default L = 0.5
 		"""
 		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b3, title = 'Green Soil Adjusted Vegetation Index')
-		gsaviVal = ((1 + L) * (nir - green)) / (nir + green + L)
-		return gsaviVal
 
 
 # GCI
 
 	def gci(self,nir, green, C=1):
 
-		"""
-		*Green Chlorophyll Index (CI-green Or GCI)*
-		args are nir (first position) and green(second position) values
-
-		Formula: nir / (green - C).
-
-		C = 1
-		"""
-   
 		nir = nir.astype(np.float32)
 		green = green.astype(np.float32)
 
@@ -529,24 +537,20 @@ class L8:
 
 	
 	def GCI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.gChloIn(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, green=self.b4)
+		"""
+		*Green Chlorophyll Index (CI-green Or GCI)*
+		args are nir (first position) and green(second position) values
+
+		Formula: nir / (green - C).
+
+		C = 1
+		"""
+		self.gChloIn(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, green=self.b3)
 
 
 
 # R_ECI
 	def redgeCI(self, nir, redge, C=1):
-
-		"""
-		Only for Sentinel 2 (red_edge band is only available in Sentinel 2)
-		
-		*Red-edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
-		args are nir (first position) and redge(second position) values
-
-    	Formula:  nir / (redge - C).
-
-		C = 1
-		"""
-
 		nir = nir.astype(np.float32)
 		redge = redge.astype(np.float32)
 
@@ -592,21 +596,21 @@ class L8:
 
 	
 	def RECI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		Only for Sentinel 2 (red_edge band is only available in Sentinel 2)
+		
+		*Red-edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
+		args are nir (first position) and redge(second position) values
+
+    	Formula:  nir / (redge - C).
+
+		C = 1
+		"""
 		self.reCInd(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, redge=self.b4)
 
 
 # VARI
 	def v_ari(self, green, red, blue):
-		
-		"""
-		*Visible Atmospherically Resistant Index (VARI)*
-		args are green (first position) and red (second position) and blue(third position) values
-
-		Similar to NDVI but useful when you only have RGB imagery. 
-
-		Formula:  (green - red) / (green + red - blue)
-		"""
-
 		green = green.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
@@ -655,6 +659,14 @@ class L8:
 			self.visualiseFunc(variVal, "Visible Atmospherically Resistant Index (VARI)")
 
 	def VARI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Visible Atmospherically Resistant Index (VARI)*
+		args are green (first position) and red (second position) and blue(third position) values
+
+		Similar to NDVI but useful when you only have RGB imagery. 
+
+		Formula:  (green - red) / (green + red - blue)
+		"""
 		self.visibleARI(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.b3, red=self.b4, blue=self.b2)
 
 
@@ -758,3 +770,375 @@ class S2:
 					Tile Number Field = {self.tnf}\n
 					Product Descriptor = {self.prod_descript}\n
 					Product Format = {self.prod_format}\n""")
+		
+
+
+### DEFINING INDICES FOR SENTINEL2
+
+	def normalized_difference(self, band1, band2):
+		band1 = band1.astype(np.float32)
+		band2 = band2.astype(np.float32)
+		numerator = band1 - band2
+		denominator = band1 + band2
+		normDifVal = numerator / denominator
+		return normDifVal
+
+	def visualiseFunc(self, normDifVal, title):
+		plt.figure(figsize=(10, 10))
+		plt.imshow(normDifVal.squeeze(), cmap='gray')
+		plt.title(title)
+		plt.colorbar()
+		plt.show()
+
+	def norm_dif(self, save_location, shp_location=None, bbcoord=None, band1=None, band2=None, visualise=False, title = "Visualization of Normalized Difference"):		
+		if bbcoord is None:
+			band1_clipped=clipRasterSHP(band1,shp_location)
+			band2_clipped=clipRasterSHP(band2,shp_location)
+			normDifVal = self.normalized_difference(band1_clipped[0], band2_clipped[0])
+			writeRaster(normDifVal,band1_clipped[1],save_location)
+		elif shp_location is None:
+			band1_clipped=clipRasterBB(band1,bbcoord)
+			band2_clipped=clipRasterBB(band2,bbcoord)
+			normDifVal = self.normalized_difference(band1_clipped[0], band2_clipped[0])
+			writeRaster(normDifVal,band1_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(normDifVal, title)
+
+
+		#NDVI
+	def NDVI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Normalized Difference Vegetation Index*
+		args are nir (first position) and red(second position) values
+
+		Formula
+		ndvi = (nir-red)/(nir+red)
+
+		"""
+		self.norm_dif(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B8A, band2=self.B4, title="Normalized Difference Vegetation Index")
+
+
+		#NDRE
+	def NDRE(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Normalized Difference Red-Edge*
+		args are nir (first position) and red-edge(second position) values
+
+		Formula
+		ndvi = (nir-redge)/(nir+redge)
+
+		Note: Red_edge band is only available in Sentinel 2
+
+		"""
+		self.norm_dif(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B8A, band2=self.B5, title="Normalized Difference Red-Edge")
+
+
+		#EVI
+	def EVIcal(self, nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5):    
+		nir = nir.astype(np.float32)
+		red = red.astype(np.float32)
+		blue = blue.astype(np.float32)
+		eviValue = G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
+		return eviValue
+
+		# PARAMETERIZED EVI
+	def evi_para(self, save_location,  nir, red, blue, shp_location=None, bbcoord=None, visualise=False, title = 'Enhanced Vegetation Index'):		
+		if bbcoord is None:
+			nir_clipped=clipRasterSHP(nir,shp_location)
+			red_clipped=clipRasterSHP(red,shp_location)
+			blue_clipped=clipRasterSHP(blue,shp_location)
+			#eviValue = self.normalized_difference(red_clipped[0], nir_clipped[0])
+			eviValue = self.EVIcal(nir_clipped[0], red_clipped[0], blue_clipped[0])
+			writeRaster(eviValue,red_clipped[1],save_location)
+		elif shp_location is None:
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			red_clipped=clipRasterBB(red,bbcoord)
+			blue_clipped=clipRasterBB(blue,bbcoord)
+			eviValue = self.EVIcal(nir_clipped[0], red_clipped[0], blue_clipped[0])
+			writeRaster(eviValue,red_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(eviValue, title)
+
+	
+	def EVI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Enhance Vegetation Index (EVI)*
+		args are nir (first position) and red(second position) and blue (third position) values. 
+		
+		Optional params and default values
+		G = 2.5,
+		L = 1,
+		C1 = 6,
+		C2 = 7.5,
+
+		Formula
+		G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
+
+		"""
+		self.evi_para(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, red=self.B4, nir=self.B8A, blue=self.B2)
+	
+		#NDWI
+	def NDWI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Normalized Difference Water Index (NDWI)*
+		args are nir (first position) and green(second position) values
+
+		Formula
+		(green - nir)/(green + nir)
+
+		"""
+		self.norm_dif(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B3, band2=self.B8A, title="Normalized Difference Water Index")
+
+		#NBR
+	def NBR(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Normailized Burn Ratio*
+		args are nir (first position) and green(second position) values
+
+		Formula
+		(nir - swir)/(nir + swir)
+
+		"""
+		self.norm_dif(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B8A, band2=self.B11, title="Normalized Burn Ratio")
+
+		#NDBI
+	def NDBI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Normalized Difference Built-Up Index*
+		args are swir (first position) and nir(second position) values
+
+		Formula
+		(swir - nir)/(swir + nir)
+		"""		
+		self.norm_dif(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B11, band2=self.B8A, title ="Normalized Difference Built-Up Index")
+
+		#GNDVI
+	def GNDVI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Green Normalized Difference Vegetation Index*
+		args are nir (first position) and green(second position) values
+
+		Formula
+		GNDVI = (nir-green)/(nir+green)
+
+		"""
+		self.norm_dif(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B8A, band2=self.B3, title ="Green Normalized Difference Vegetation Index")
+
+
+#GLI
+	def gli(self, green,red,blue):
+		
+		green = green.astype(np.float32)
+		red = red.astype(np.float32)
+		blue = blue.astype(np.float32)
+
+		gliValue = (2*green - red- blue)/(2*green + red + blue)
+		return gliValue
+	
+
+		# PARAMETERIZED GLI
+	def gLeafIn(self, save_location, shp_location=None, bbcoord=None, green=None, red=None, blue=None, visualise=False):		
+		if bbcoord is None:
+			green_clipped=clipRasterSHP(green,shp_location)
+			red_clipped=clipRasterSHP(red,shp_location)
+			blue_clipped=clipRasterSHP(blue,shp_location)
+			gliValue = self.gli(green_clipped[0], red_clipped[0], blue_clipped[0])
+			writeRaster(gliValue,green_clipped[1],save_location)
+		elif shp_location is None:
+			green_clipped=clipRasterBB(green,bbcoord)
+			red_clipped=clipRasterBB(red,bbcoord)
+			blue_clipped=clipRasterBB(blue,bbcoord)
+			gliValue = self.gli(green_clipped[0], red_clipped[0], blue_clipped[0])
+			writeRaster(gliValue,green_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(gliValue, 'Green Leaf Index')
+
+	
+	def GLI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Green Leaf Index*
+		args are green (first position) and red(second position) and blue (thrid position) values
+
+		Formula
+		gli = (2*green - red - blue)/(2*green + red + blue)
+		"""
+		self.gLeafIn(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.B3, red=self.B4, blue=self.B2)
+
+
+
+# SAVI
+
+	def savi(self, band1, band2, L=0.5):
+		band1 = band1.astype(np.float32)
+		band2 = band2.astype(np.float32)
+
+		saviVal = ((1 + L) * (band1 - band2)) / (band1 + band2 + L)
+
+		return saviVal
+
+		# PARAMETERIZED SAVI
+	def soilAvi(self, save_location, title, shp_location=None, bbcoord=None, band1=None, band2=None, L=0.5, visualise=False):		
+		if bbcoord is None:
+			band1_clipped=clipRasterSHP(band1,shp_location)
+			band2_clipped=clipRasterSHP(band2,shp_location)
+			saviVal = self.savi(band1_clipped[0], band2_clipped[0])
+			writeRaster(saviVal,band1_clipped[1],save_location)
+		elif shp_location is None:
+			band1_clipped=clipRasterBB(band1,bbcoord)
+			band2_clipped=clipRasterBB(band2,bbcoord)
+			saviVal = self.savi(band1_clipped[0], band2_clipped[0])
+			writeRaster(saviVal,band1_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(saviVal, title)
+
+	
+	def SAVI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Soil Adjusted Vegetation Index (SAVI)*
+		args are nir (first position) and red(second position) values
+
+		Formula: ((1 + L) * (NIR - Red)) / (NIR + Red + L), 
+
+		default L = 0.5
+		"""
+		self.soilAvi(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B8A, band2=self.B4, title = 'Soil Adjusted Vegetation Index')
+
+
+
+# GSAVI
+
+	def GSAVI(self, save_location, visualise, shp_location=None, bbcoord=None, L=0.5):
+		"""
+		*Green Soil Adjusted Vegetation Index (G-SAVI)*
+		args are nir (first position) and green(second position) values
+
+		Formula: ((1 + L) * (NIR - green)) / (NIR + green + L) 
+
+		default L = 0.5
+		"""
+		self.soilAvi(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.B8A, band2=self.B3, title = 'Green Soil Adjusted Vegetation Index')
+
+
+# GCI
+
+	def gci(self,nir, green, C=1):
+
+		nir = nir.astype(np.float32)
+		green = green.astype(np.float32)
+
+		gciVal = nir / (green - C)
+		return gciVal
+
+		# PARAMETERIZED GCI
+	def gChloIn(self, save_location, shp_location=None, bbcoord=None, nir=None, green=None, C=1, visualise=False):		
+		if bbcoord is None:
+			nir_clipped=clipRasterSHP(nir,shp_location)
+			green_clipped=clipRasterSHP(green,shp_location)
+			gciVal = self.gci(nir_clipped[0], green_clipped[0])
+			writeRaster(gciVal,nir_clipped[1],save_location)
+		elif shp_location is None:
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			green_clipped=clipRasterBB(green,bbcoord)
+			gciVal = self.gci(nir_clipped[0], green_clipped[0])
+			writeRaster(gciVal,nir_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(gciVal, "Green Chlorophyll Index")
+
+	
+	def GCI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Green Chlorophyll Index (CI-green Or GCI)*
+		args are nir (first position) and green(second position) values
+
+		Formula: nir / (green - C).
+
+		C = 1
+		"""
+		self.gChloIn(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.B8A, green=self.B3)
+
+
+
+# R_ECI
+	def redgeCI(self, nir, redge, C=1):
+		nir = nir.astype(np.float32)
+		redge = redge.astype(np.float32)
+
+		reCiVal = nir / (redge - C)
+		return reCiVal
+
+
+		# PARAMETERIZED R_ECI
+	def reCInd(self, save_location, shp_location=None, bbcoord=None, nir=None, redge=None, C=1, visualise=False):		
+		if bbcoord is None:
+			nir_clipped=clipRasterSHP(nir,shp_location)
+			redge_clipped=clipRasterSHP(redge,shp_location)
+			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0])
+			writeRaster(reCiVal,nir_clipped[1],save_location)
+		elif shp_location is None:
+			nir_clipped=clipRasterBB(nir,bbcoord)
+			redge_clipped=clipRasterBB(redge,bbcoord)
+			reCiVal = self.redgeCI(nir_clipped[0], redge_clipped[0])
+			writeRaster(reCiVal,nir_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(reCiVal, "Red-edge Chlorophyll Index")
+
+	
+	def RECI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		
+		*Red-edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
+		args are nir (first position) and redge(second position) values
+
+    	Formula:  nir / (redge - C).
+
+		C = 1
+
+		Note: Red_edge band is only available in Sentinel 2
+		"""
+		self.reCInd(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.B8A, redge=self.B5)
+
+
+# VARI
+	def v_ari(self, green, red, blue):
+		green = green.astype(np.float32)
+		red = red.astype(np.float32)
+		blue = blue.astype(np.float32)
+
+		variVal = (green - red) / (green + red -blue)
+		return variVal
+
+		# PARAMETERIZED VARI
+	def visibleARI(self, save_location, shp_location=None, bbcoord=None, green=None, red=None, blue=None, visualise=False):		
+		if bbcoord is None:
+			green_clipped=clipRasterSHP(green,shp_location)
+			red_clipped=clipRasterSHP(red,shp_location)
+			blue_clipped=clipRasterSHP(blue,shp_location)
+			variVal = self.v_ari(green_clipped[0], red_clipped[0], blue_clipped[0])
+			writeRaster(variVal,green_clipped[1],save_location)
+		elif shp_location is None:
+			green_clipped=clipRasterBB(green,bbcoord)
+			red_clipped=clipRasterBB(red,bbcoord)
+			blue_clipped=clipRasterBB(blue,bbcoord)
+			variVal = self.v_ari(green_clipped[0], red_clipped[0], blue_clipped[0])
+			writeRaster(variVal,green_clipped[1],save_location)
+
+		if visualise==True:
+			self.visualiseFunc(variVal, "Visible Atmospherically Resistant Index (VARI)")
+
+	def VARI(self, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Visible Atmospherically Resistant Index (VARI)*
+		args are green (first position) and red (second position) and blue(third position) values
+
+		Similar to NDVI but useful when you only have RGB imagery. 
+
+		Formula:  (green - red) / (green + red - blue)
+		"""
+		self.visibleARI(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.b3, red=self.b4, blue=self.b2)
+
