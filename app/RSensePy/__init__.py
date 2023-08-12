@@ -683,38 +683,38 @@ class L8:
 
 class S2:
 	def __init__(self, directory):
+
 		BandNum = None
-		QA_PIXEL, B1, B2, B3, B4, B5, B6, B7, B8A, B11, B12 = None, None, None, None, None, None, None, None, None, None
+		QA_PIXEL, B1, B2, B3, B4, B5, B6, B7, B8A, B11, B12,TCI = None, None, None, None, None, None, None, None, None, None, None, None
 		
 		tif_files = []
 
 		try:
 			for file in os.listdir(directory):
+				print(file)
 				if file.endswith(".jp2"):
 					tif_files.append(file)
 		except Exception:
 			print("Image Collection directory path is invalid")
 			sys.exit()
 
-		print(tif_files)
-
 		# assign the appropriate files to their respective band variables
 
 		for item in tif_files:
-			BandNum = item[-11:-8]
-			if BandNum == "BO1":
+			BandNum = item[-7:-4]
+			if BandNum == "B01":
 				B1=item
-			elif BandNum=='BO2':
+			elif BandNum=='B02':
 				B2=item
-			elif BandNum=='BO3':
+			elif BandNum=='B03':
 				B3=item
-			elif BandNum=='BO4':
+			elif BandNum=='B04':
 				B4=item
-			elif BandNum=='BO5':
+			elif BandNum=='B05':
 				B5=item
-			elif BandNum=='BO6':
+			elif BandNum=='B06':
 				B6=item
-			elif BandNum=='BO7':
+			elif BandNum=='B07':
 				B7=item
 			elif BandNum=='B8A':
 				B8A=item
@@ -722,26 +722,20 @@ class S2:
 				B11=item
 			elif BandNum=='B12':
 				B12=item
-			elif BandNum=='SCL':
-				SCL=item
 			elif BandNum=='TCI':
-				TCI=item
-			elif BandNum=='WVP':
-				WVP=item
+				TCI=item	
+		self.b1= directory+"//"+B1
+		self.b2= directory+"//"+B2
+		self.b3= directory+"//"+B3
+		self.b4= directory+"//"+B4
+		self.b5= directory+"//"+B5
+		self.b6= directory+"//"+B6
+		self.b7= directory+"//"+B7
+		self.b8A= directory+"//"+B8A
+		self.b11= directory+"//"+B11
+		self.b12= directory+"//"+B12
+		self.tci= directory+"//"+TCI
 
-		self.B1= directory+"\\"+B1
-		self.B2= directory+"\\"+B2
-		self.B3= directory+"\\"+B3
-		self.B4= directory+"\\"+B4
-		self.B5= directory+"\\"+B5
-		self.B6= directory+"\\"+B6
-		self.B7= directory+"\\"+B7
-		self.B8A= directory+"\\"+B8A
-		self.B11= directory+"\\"+B11
-		self.B12= directory+"\\"+B12
-		self.SCL= directory+"\\"+SCL
-		self.TCI= directory+"\\"+TCI
-		self.WVP= directory+"\\"+WVP
 
 	#Defining the metadata
 		basename = os.path.basename(directory) #where directory is the path to the S2 data folder
@@ -750,38 +744,34 @@ class S2:
 		for i in basename.split('_'):
 			namelist.append(i)
 			
-	#Defining the individual metadata varaibles
-		self.mission=namelist[0]
-		self.product_level=namelist[1]
-		self.sensing_date=namelist[2]
-		self.base_number=namelist[3]
-		self.ron=namelist[4]  
-		self.tnf=namelist[5]  
-		pd_pf=namelist[6]
+	# #Defining the individual metadata varaibles
+	# 	self.mission=namelist[0]
+	# 	self.product_level=namelist[1]
+	# 	self.sensing_date=namelist[2]
+	# 	self.base_number=namelist[3]
+	# 	self.ron=namelist[4]  
+	# 	self.tnf=namelist[5]  
 
-		def splitpd_pf(pd_pf):
-			list=[]
-			for i in pd_pf.split('.'):
-				list.append(i)
-			return list[0], list[1]
-		
-		self.prod_descript=splitpd_pf[0]
-		self.prod_format=splitpd_pf[1]  
+	# 	listprod=[]
+	# 	for i in namelist[6].split('.'):
+	# 		listprod.append(i)
+	# 	self.prod_descript=listprod[0]
+	# 	self.prod_format=listprod[1]  
 
-	# METADATA
-	def meta(self):
-		print(f"""\n
-					Mission = {self.mission}\n 
-					Product Level = {self.product_level}\n
-					Sensing Date= {self.sensing_date}\n
-					Base Number = {self.base_number}\n
-					Relative Orbit Number = {self.ron}\n
-					Tile Number Field = {self.tnf}\n
-					Product Descriptor = {self.prod_descript}\n
-					Product Format = {self.prod_format}\n""")
-		
+	# # METADATA
+	# def meta(self):
+	# 	print(f"""\n
+	# 				Mission = {self.mission}\n 
+	# 				Product Level = {self.product_level}\n
+	# 				Sensing Date= {self.sensing_date}\n
+	# 				Base Number = {self.base_number}\n
+	# 				Relative Orbit Number = {self.ron}\n
+	# 				Tile Number Field = {self.tnf}\n
+	# 				Product description = {self.prod_descript}\n
+	# 				Product Format = {self.prod_format}\n
+	# 				""")
 
-
+	
 ### DEFINING INDICES FOR SENTINEL2
 
 	def normalized_difference(self, band1, band2):

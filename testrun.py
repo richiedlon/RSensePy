@@ -18,9 +18,11 @@ outputLocation1 = "NBR1.tif"
 
 
 geopy = ic.L8("LC08_L2SP_191027_20220720_20220726_02_T1")
+geopyS2 = ic.S2("S2A_MSIL1C_20230806T055641_N0509_R091_T50XML_20230806T063042.SAFE//GRANULE//L1C_T50XML_A042416_20230806T055638//IMG_DATA")
 #print(geopy.meta())
+#print(geopyS2.meta())
 
-ic.help()
+#ic.help()
 
 # geopy.norm_dif(cloud=True, save_location=outputLocation1,shp_location=shpLocation, band1= geopy.b4, band2=geopy.b5, visualise=True)
 # geopy.norm_dif(cloud=True, save_location=outputLocation1, bbcoord=bbox, band1= geopy.b4, band2=geopy.b5, visualise=True)
