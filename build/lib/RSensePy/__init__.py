@@ -10,6 +10,78 @@ from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip_shp
 import matplotlib
 import matplotlib.pyplot as plt
 
+def getCapabilities():
+    answer= input("""
+				Hello there!
+				Welcome to RsensePy, your handy tool to compute a diverse range of optical remote-sensing based indices hitch free!
+				Please note that RsensePy currently surpports level 2A (surface reflectance) Landsat 8 and Sentinel 2 (20m) imagery only.
+				Select your satellite type below to get a list of available satellite-specific indices on RsensePy.
+
+				What imagery are you working with today? 
+				Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery. 
+				""")
+    if answer == "8":
+        satellite = "Landsat 8"
+        print(f"""With your Landsat {answer} imagery, you can run the following indices:
+        Normalized Difference Vegetation Index (NDVI)
+        Enhanced Vegetation Index(EVI)
+        Normalized Differnce Water Index(NDWI)
+        Normalized Burn Ratio(NBR)
+        Normalized Difference Built-Up Index(NDBI)
+        Green Normalised Difference Vegeation Index(GNDVI)
+        Green Leaf Index(GLI)
+        Soil Adjusted Vegetation Index (SAVI)
+        Green Soild Adjusted Vegetation Index(GSAVI)
+        Green Chlorophyll Index(GLI)
+        Visible Atmospherically Resistant Index (VARI)""")
+        print("To initiate your Landsat8 imagery for use with RsensPy, please run the L8 class using the file name as input. Then get the metadata by calling the meta() method")
+    elif answer == "2":
+        satellite = "Sentinel 2"
+        print(f"""With your Sentinel {answer} imagery, you can run the following indices:
+        Normalized Difference Vegetation Index (NDVI)
+        Enhanced Vegetation Index(EVI)
+        Normalized Differnce Water Index(NDWI)
+        Normalized Burn Ratio(NBR)
+        Normalized Difference Built-Up Index(NDBI)
+        Green Normalised Difference Vegeation Index(GNDVI)
+        Green Leaf Index(GLI)
+        Soil Adjusted Vegetation Index (SAVI)
+        Green Soild Adjusted Vegetation Index(GSAVI)
+        Green Chlorophyll Index(GCI)
+        Red-Edge Chlorophyll Index(ReCI)
+	    Normalized Difference Red-Edge (NDRE)
+        Visible Atmospherically Resistant Index (VARI)""")
+        print("To initiate your Sentinel2 imagery for use with RsensPy, please run the S2 class using the file name as input. Then get the metadata by calling the meta() method")
+    else: 
+        answer != "8" and "2"
+        print("Please rerun and input the appropriate value")
+    print ("Call RSensePy.help() function to get step by step guidence to start working with the package")
+
+def help():
+	print("""
+### Setup RsensePy ####
+Step 1 - Import RsensePy package  
+import RSensePy as rp
+
+Step 2 - Create an object from S2 (For Sentinel 2 image) or L8 class (For Landsat 8 image)  
+LS8Image = rp.L8("path/to/the/imagebandfolder") or S2Image =rp.S2("path/to/the/imagebandfolder")
+
+### Getting basic metadata of the image ####
+Call meta() method from L2 or S8 classe
+Ex - LS8Image.meta()
+
+### Calculating Indices ####
+NDVI calculation
+LS8Image.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=False)
+
+Normalized difference between any 2 bands
+LS8Image.norm_dif(cloud=False, save_location=outputLocation1, bbcoord=bbox, band1= LS8Image.b4, band2=LS8Image.b5, visualise=True)
+
+
+Please refer to the github readme or pypi package page for more index calculation options
+"""
+		)
+### Defining the Landsat 8 Class and accompanying methods
 class L8:
 	def __init__(self,directory):
 		BandNum = None
@@ -98,7 +170,9 @@ class L8:
 					Collection Number = {self.coll_number}\n
 					Collection Category = {self.coll_category}\n""")
 
-
+	
+	
+	### DEFINING INDICES FOR LANDSAT 8
 
 	def normalized_difference(self, band1, band2):
 		band1 = band1.astype(np.float32)
@@ -152,26 +226,21 @@ class L8:
 		if visualise==True:
 			self.visualiseFunc(normDifVal, title)
 
+		#NDVI
 	def NDVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title="Visualization of NDVI")
+		"""
+		*Normalized Difference Vegetation Index*
+		args are nir (first position) and red(second position) values
 
+		Formula
+		ndvi = (nir-red)/(nir+red)
+
+		"""
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title="Normalized Difference Vegetation Index")
+		
 
 		#EVI
 	def EVIcal(self, nir, red, blue, G = 2.5, L = 1, C1 = 6, C2 = 7.5):    
-		"""
-		*Enhance Vegetation Index*
-		args are nir (first position) and red(second position) and blue (third position) values. 
-		
-		Optional params and default values
-		G = 2.5,
-		L = 1,
-		C1 = 6,
-		C2 = 7.5,
-
-		Formula
-		G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
-
-		"""
 		nir = nir.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
@@ -179,7 +248,7 @@ class L8:
 		return eviValue
 
 		# PARAMETERIZED EVI
-	def evi_para(self, cloud, save_location,  nir, red, blue, shp_location=None, bbcoord=None, visualise=False, title = 'Visualization of EVI Index'):		
+	def evi_para(self, cloud, save_location,  nir, red, blue, shp_location=None, bbcoord=None, visualise=False, title = 'Enhanced Vegetation Index'):		
 		if cloud ==False and (bbcoord is None):
 			nir_clipped=clipRasterSHP(nir,shp_location)
 			red_clipped=clipRasterSHP(red,shp_location)
@@ -227,10 +296,32 @@ class L8:
 
 	
 	def EVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Enhance Vegetation Index (EVI)*
+		args are nir (first position) and red(second position) and blue (third position) values. 
+		
+		Optional params and default values
+		G = 2.5,
+		L = 1,
+		C1 = 6,
+		C2 = 7.5,
+
+		Formula
+		G * ((nir - red)/(nir + C1 * red - C2 * blue + L))
+
+		"""
 		self.evi_para(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, red=self.b4, nir=self.b5, blue=self.b2)
 	
 	def NDWI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b3, band2=self.b5, title="Visualization of NDWI")
+		"""
+		*Normalized Difference Water Index (NDWI)*
+		args are nir (first position) and green(second position) values
+
+		Formula
+		(green - nir)/(green + nir)
+
+		"""
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b3, band2=self.b5, title="Normalized Difference Water Index")
 
 	def NBR(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
 		"""
@@ -241,7 +332,7 @@ class L8:
 		(nir - swir)/(nir + swir)
 
 		"""
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b6, title="Visualization of NDBR")
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b6, title="Normalized Burn Ratio")
 
 	
 	def NDBI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
@@ -264,21 +355,12 @@ class L8:
 		GNDVI = (nir-green)/(nir+green)
 
 		"""
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b3, title ="Normalized Difference Green Index")
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b3, title ="Green Normalized Difference Vegetation Index")
 
 
 # GLI
 	def gli(self, green,red,blue):
 		
-		"""
-		*Green Leaf Index*
-		args are green (first position) and red(second position) and blue (thrid position) values
-
-		Formula
-		gli = (2*green - red - blue)/(2*green + red + blue)
-		
-		"""
-
 		green = green.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
@@ -388,6 +470,14 @@ class L8:
 
 	
 	def SAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Soil Adjusted Vegetation Index (SAVI)*
+		args are nir (first position) and red(second position) values
+
+		Formula: ((1 + L) * (NIR - Red)) / (NIR + Red + L), 
+
+		default L = 0.5
+		"""
 		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b4, title = 'Soil Adjusted Vegetation Index')
 
 
@@ -396,31 +486,20 @@ class L8:
 
 	def GSAVI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None, L=0.5):
 		"""
-		*Soil Adjusted Vegetation Index*
+		*Green Soil Adjusted Vegetation Index (G-SAVI)*
 		args are nir (first position) and green(second position) values
 
-		Formula: ((1 + L) * (NIR - green)) / (NIR + green + L), 
+		Formula: ((1 + L) * (NIR - green)) / (NIR + green + L) 
 
 		default L = 0.5
 		"""
 		self.soilAvi(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b3, title = 'Green Soil Adjusted Vegetation Index')
-		gsaviVal = ((1 + L) * (nir - green)) / (nir + green + L)
-		return gsaviVal
 
 
 # GCI
 
 	def gci(self,nir, green, C=1):
 
-		"""
-		*Green Chlorophyll Index (CI-green Or GCI)*
-		args are nir (first position) and green(second position) values
-
-		Formula: nir / (green - C).
-
-		C = 1
-		"""
-   
 		nir = nir.astype(np.float32)
 		green = green.astype(np.float32)
 
@@ -463,30 +542,24 @@ class L8:
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseFunc(gciVal, "Visualization of Green Chlorophyll Index")
+			self.visualiseFunc(gciVal, "Green Chlorophyll Index")
 
 	
 	def GCI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
-		self.gChloIn(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, green=self.b4)
+		"""
+		*Green Chlorophyll Index (CI-green Or GCI)*
+		args are nir (first position) and green(second position) values
+
+		Formula: nir / (green - C).
+
+		C = 1
+		"""
+		self.gChloIn(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, green=self.b3)
 
 
 
 # R_ECI
 	def redgeCI(self, nir, redge, C=1):
-
-		"""
-		Only for Sentinel 2 (red_edge band is only available in Sentinel 2)
-
-		##rework reCI 
-
-		*Red-edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
-		args are nir (first position) and redge(second position) values
-
-    	Formula:  nir / (redge - C).
-
-		C = 1
-		"""
-
 		nir = nir.astype(np.float32)
 		redge = redge.astype(np.float32)
 
@@ -528,25 +601,25 @@ class L8:
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseFunc(reCiVal, "Visualization of Red-edge Chlorophyll Index")
+			self.visualiseFunc(reCiVal, "Red-edge Chlorophyll Index")
 
 	
 	def RECI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		Only for Sentinel 2 (red_edge band is only available in Sentinel 2)
+		
+		*Red-edge Chlorophyll Index (CI-Red_edge Or R-ECI)*
+		args are nir (first position) and redge(second position) values
+
+    	Formula:  nir / (redge - C).
+
+		C = 1
+		"""
 		self.reCInd(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, nir=self.b5, redge=self.b4)
 
 
 # VARI
 	def v_ari(self, green, red, blue):
-		
-		"""
-		*Visible Atmospherically Resistant Index (VARI)*
-		args are green (first position) and red (second position) and blue(third position) values
-
-		Similar to NDVI but useful when you only have RGB imagery. 
-
-		Formula:  (green - red) / (green + red - blue)
-		"""
-
 		green = green.astype(np.float32)
 		red = red.astype(np.float32)
 		blue = blue.astype(np.float32)
@@ -592,7 +665,108 @@ class L8:
 			print("Writing raster completed")
 
 		if visualise==True:
-			self.visualiseFunc(variVal, "Visualization of Visible Atmospherically Resistant Index (VARI)")
+			self.visualiseFunc(variVal, "Visible Atmospherically Resistant Index (VARI)")
 
 	def VARI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
+		"""
+		*Visible Atmospherically Resistant Index (VARI)*
+		args are green (first position) and red (second position) and blue(third position) values
+
+		Similar to NDVI but useful when you only have RGB imagery. 
+
+		Formula:  (green - red) / (green + red - blue)
+		"""
 		self.visibleARI(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.b3, red=self.b4, blue=self.b2)
+
+
+### Defining Sentinel 2 class and accompanying methods
+
+class S2:
+	def __init__(self, directory):
+
+		BandNum = None
+		QA_PIXEL, B1, B2, B3, B4, B5, B6, B7, B8A, B11, B12,TCI = None, None, None, None, None, None, None, None, None, None, None, None
+		
+		tif_files = []
+
+		try:    
+		    for root, dirs, files in os.walk(directory):
+		        for file in files:
+		            if file.endswith('.jp2'):
+		                tif_files.append(os.path.join(root, file))
+		except Exception:
+			print("Image Collection directory path is invalid")
+			sys.exit()	    
+
+
+		# assign the appropriate files to their respective band variables
+
+		for item in tif_files:
+			BandNum = item[-7:-4]
+			if BandNum == "B01":
+				B1=item
+			elif BandNum=='B02':
+				B2=item
+			elif BandNum=='B03':
+				B3=item
+			elif BandNum=='B04':
+				B4=item
+			elif BandNum=='B05':
+				B5=item
+			elif BandNum=='B06':
+				B6=item
+			elif BandNum=='B07':
+				B7=item
+			elif BandNum=='B8A':
+				B8A=item
+			elif BandNum=='B11':
+				B11=item
+			elif BandNum=='B12':
+				B12=item
+			elif BandNum=='TCI':
+				TCI=item	
+		self.b1= B1
+		self.b2= B2
+		self.b3= B3
+		self.b4= B4
+		self.b5= B5
+		self.b6= B6
+		self.b7= B7
+		self.b8A=B8A
+		self.b11= B11
+		self.b12= B12
+		self.tci= TCI
+
+	#Defining the metadata
+		basename = os.path.basename(directory) #where directory is the path to the S2 data folder
+		namelist=[]
+
+		for i in basename.split('_'):
+			namelist.append(i)
+			
+	#Defining the individual metadata varaibles
+		self.mission=namelist[0]
+		self.product_level=namelist[1]
+		self.sensing_date=namelist[2]
+		self.base_number=namelist[3]
+		self.ron=namelist[4]  
+		self.tnf=namelist[5]  
+
+		listprod=[]
+		for i in namelist[6].split('.'):
+			listprod.append(i)
+		self.prod_descript=listprod[0]
+		self.prod_format=listprod[1]  
+
+	# METADATA
+	def meta(self):
+		print(f"""\n
+					Mission = {self.mission}\n 
+					Product Level = {self.product_level}\n
+					Sensing Date= {self.sensing_date}\n
+					Base Number = {self.base_number}\n
+					Relative Orbit Number = {self.ron}\n
+					Tile Number Field = {self.tnf}\n
+					Product description = {self.prod_descript}\n
+					Product Format = {self.prod_format}\n
+					""")

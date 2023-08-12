@@ -1,11 +1,11 @@
 from setuptools import find_packages, setup
 
-with open("app/README.md", "r") as f:
+with open("README.md", "r") as f:
 	long_description = f.read()
 
 setup(
 	name = "RSensePy",
-	version = "0.0.2",
+	version = "0.0.3",
 	description = "Biophysical parameter calculator for Landsat 8 data",
 	package_dir ={"":"app"},
 	packages = find_packages(where="app"),
