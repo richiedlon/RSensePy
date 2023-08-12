@@ -689,14 +689,15 @@ class S2:
 		
 		tif_files = []
 
-		try:
-			for file in os.listdir(directory):
-				print(file)
-				if file.endswith(".jp2"):
-					tif_files.append(file)
+		try:    
+		    for root, dirs, files in os.walk(directory):
+		        for file in files:
+		            if file.endswith('.jp2'):
+		                tif_files.append(os.path.join(root, file))
 		except Exception:
 			print("Image Collection directory path is invalid")
-			sys.exit()
+			sys.exit()	    
+
 
 		# assign the appropriate files to their respective band variables
 
@@ -744,32 +745,32 @@ class S2:
 		for i in basename.split('_'):
 			namelist.append(i)
 			
-	# #Defining the individual metadata varaibles
-	# 	self.mission=namelist[0]
-	# 	self.product_level=namelist[1]
-	# 	self.sensing_date=namelist[2]
-	# 	self.base_number=namelist[3]
-	# 	self.ron=namelist[4]  
-	# 	self.tnf=namelist[5]  
+	#Defining the individual metadata varaibles
+		self.mission=namelist[0]
+		self.product_level=namelist[1]
+		self.sensing_date=namelist[2]
+		self.base_number=namelist[3]
+		self.ron=namelist[4]  
+		self.tnf=namelist[5]  
 
-	# 	listprod=[]
-	# 	for i in namelist[6].split('.'):
-	# 		listprod.append(i)
-	# 	self.prod_descript=listprod[0]
-	# 	self.prod_format=listprod[1]  
+		listprod=[]
+		for i in namelist[6].split('.'):
+			listprod.append(i)
+		self.prod_descript=listprod[0]
+		self.prod_format=listprod[1]  
 
-	# # METADATA
-	# def meta(self):
-	# 	print(f"""\n
-	# 				Mission = {self.mission}\n 
-	# 				Product Level = {self.product_level}\n
-	# 				Sensing Date= {self.sensing_date}\n
-	# 				Base Number = {self.base_number}\n
-	# 				Relative Orbit Number = {self.ron}\n
-	# 				Tile Number Field = {self.tnf}\n
-	# 				Product description = {self.prod_descript}\n
-	# 				Product Format = {self.prod_format}\n
-	# 				""")
+	# METADATA
+	def meta(self):
+		print(f"""\n
+					Mission = {self.mission}\n 
+					Product Level = {self.product_level}\n
+					Sensing Date= {self.sensing_date}\n
+					Base Number = {self.base_number}\n
+					Relative Orbit Number = {self.ron}\n
+					Tile Number Field = {self.tnf}\n
+					Product description = {self.prod_descript}\n
+					Product Format = {self.prod_format}\n
+					""")
 
 	
 ### DEFINING INDICES FOR SENTINEL2
