@@ -16,10 +16,11 @@ shpLocation= "AOI/AOI.shp"
 outputLocation1 = "NBR1.tif"
 
 
-ic.selectsensor()
-# geopy = ic.L8("LC08_L2SP_191027_20220720_20220726_02_T1")
-# print(geopy.meta())
 
+geopy = ic.L8("LC08_L2SP_191027_20220720_20220726_02_T1")
+#print(geopy.meta())
+
+ic.help()
 
 # geopy.norm_dif(cloud=True, save_location=outputLocation1,shp_location=shpLocation, band1= geopy.b4, band2=geopy.b5, visualise=True)
 # geopy.norm_dif(cloud=True, save_location=outputLocation1, bbcoord=bbox, band1= geopy.b4, band2=geopy.b5, visualise=True)

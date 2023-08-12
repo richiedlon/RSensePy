@@ -10,17 +10,16 @@ from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip_shp
 import matplotlib
 import matplotlib.pyplot as plt
 
-def selectsensor():
-    satellite=""
+def getCapabilities():
     answer= input("""
-Hello there!
-Welcome to RsensePy, your handy tool to compute a diverse range of optical remote-sensing based indices hitch free!
-Please note that RsensePy currently surpports level 2A (surface reflectance) Landsat 8 and Sentinel 2 (20m) imagery only.
-Select your satellite type below to get a list of available satellite-specific indices on RsensePy.
+				Hello there!
+				Welcome to RsensePy, your handy tool to compute a diverse range of optical remote-sensing based indices hitch free!
+				Please note that RsensePy currently surpports level 2A (surface reflectance) Landsat 8 and Sentinel 2 (20m) imagery only.
+				Select your satellite type below to get a list of available satellite-specific indices on RsensePy.
 
-What imagery are you working with today? 
-Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery. 
-""")
+				What imagery are you working with today? 
+				Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery. 
+				""")
     if answer == "8":
         satellite = "Landsat 8"
         print(f"""With your Landsat {answer} imagery, you can run the following indices:
@@ -34,8 +33,8 @@ Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery.
         Soil Adjusted Vegetation Index (SAVI)
         Green Soild Adjusted Vegetation Index(GSAVI)
         Green Chlorophyll Index(GLI)
-        Visible Atmospherically Resistant Index (VARI)
-              """)
+        Visible Atmospherically Resistant Index (VARI)""")
+        print("To initiate your Landsat8 imagery for use with RsensPy, please run the L8 class using the file name as input. Then get the metadata by calling the meta() method")
     elif answer == "2":
         satellite = "Sentinel 2"
         print(f"""With your Sentinel {answer} imagery, you can run the following indices:
@@ -51,27 +50,37 @@ Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery.
         Green Chlorophyll Index(GCI)
         Red-Edge Chlorophyll Index(ReCI)
 	    Normalized Difference Red-Edge (NDRE)
-        Visible Atmospherically Resistant Index (VARI)
-              """)
+        Visible Atmospherically Resistant Index (VARI)""")
+        print("To initiate your Sentinel2 imagery for use with RsensPy, please run the S2 class using the file name as input. Then get the metadata by calling the meta() method")
     else: 
         answer != "8" and "2"
         print("Please rerun and input the appropriate value")
-    
-    return satellite, answer
+    print ("Call RSensePy.help() function to get step by step guidence to start working with the package")
 
-sat = selectsensor[1]
-
-if sat == 8:
+def help():
 	print("""
-       To initiate your Landsat8 imagery for use with RsensPy, please run the L8 class using the file name as input. 
-       Then get the metadata by calling the meta() method
-       """)
-elif sat == 2:
-	print("""
-	   To initiate your Sentinel2 imagery for use with RsensPy, please run the S2 class using the file name as input
-       Then get the metadata by calling the meta() method
-       """)
+### Setup RsensePy ####
+Step 1 - Import RsensePy package  
+import RSensePy as rp
 
+Step 2 - Create an object from S2 (For Sentinel 2 image) or L8 class (For Landsat 8 image)  
+LS8Image = rp.L8("path/to/the/imagebandfolder") or S2Image =rp.S2("path/to/the/imagebandfolder")
+
+### Getting basic metadata of the image ####
+Call meta() method from L2 or S8 classe
+Ex - LS8Image.meta()
+
+### Calculating Indices ####
+NDVI calculation
+LS8Image.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=False)
+
+Normalized difference between any 2 bands
+LS8Image.norm_dif(cloud=False, save_location=outputLocation1, bbcoord=bbox, band1= LS8Image.b4, band2=LS8Image.b5, visualise=True)
+
+
+Please refer to the github readme or pypi package page for more index calculation options
+"""
+		)
 ### Defining the Landsat 8 Class and accompanying methods
 class L8:
 	def __init__(self,directory):
