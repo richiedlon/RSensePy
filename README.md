@@ -54,16 +54,33 @@ RSensePyObj.meta()
 
 ```bash
 # Clip the Image with external shapefile
-RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, shp_location=shapefile/location/path, visualise=False)
+# If cloud masking is required, set the cloud parameter to True, else False
+# If visualization is required, set the visualise parameter to True, else False
+RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", shp_location="shapefile/location/path", visualise=False)
 ```
 ```bash
 # Clip the Image with bounding box coordinated
+# bbox = [minX, minY, maxX, maxY]
 bbox = [13.490206, 48.3355,14.076421, 48.007881]
-RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, bbcoord=bbox, visualise=False)
+RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", bbcoord=bbox, visualise=False)
 ```
+### Indexes that can be calculated 
+Normalized Difference Vegetation Index (NDVI)
+Enhanced Vegetation Index(EVI)
+Normalized Differnce Water Index(NDWI)
+Normalized Burn Ratio(NBR)
+Normalized Difference Built-Up Index(NDBI)
+Green Normalised Difference Vegeation Index(GNDVI)
+Green Leaf Index(GLI)
+Soil Adjusted Vegetation Index (SAVI)
+Green Soild Adjusted Vegetation Index(GSAVI)
+Green Chlorophyll Index(GLI)
+Visible Atmospherically Resistant Index (VARI)
+
+
 
 ## Calculate Normalised Difference between two bands
-Below example shows how to calculate normalised difference between band 2 and band 6
+Below example shows how to calculate normalised difference between band 4 and band 5
 ```bash
 # Access individual Landsat bands using object attributes
 band1 = RSensePyObj.b1
@@ -73,7 +90,7 @@ band2 = RSensePyObj.b2
 band6 = RSensePyObj.b6
 band7 = RSensePyObj.b7
 
-RSensePyObj.norm_dif(cloud=True, save_location=output/Location/path,shp_location=shapefile/location/path, band1= RSensePyObj.b4, RSensePyObj=geopy.b5, visualise=True)
+RSensePyObj.norm_dif(cloud=True, save_location=output/Location/path,shp_location=shapefile/location/path, band1= RSensePyObj.b4, band2= RSensePyObj.b5, visualise=True)
 ```
 
 ## Get capabilities of the RSensePy
