@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: RSensePy
-Version: 0.0.3
+Version: 0.0.4
 Summary: Biophysical parameter calculator for Landsat 8 data
 Home-page: https://github.com/richiedlon/SoftwareDevProject
 Author: richiedlon/opeyami
@@ -34,7 +34,103 @@ pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/si
 
 ## Getting Started
 
-Once the package is installed, check out the [example notebook](https://github.com/your_username/vegetation_index_calculation/blob/main/examples/vegetation_index_calculation_example.ipynb) to get started with vegetation index calculation and visualization. The notebook provides step-by-step guidance on loading satellite imagery, calculating vegetation indices, and generating informative visualizations.
+Once the package is installed, check out the [example notebook](https://github.com/richiedlon/SoftwareDevProject/RSensePy_example.ipynb) to get started with vegetation index calculation and visualization. The notebook provides step-by-step guidance on loading satellite imagery, calculating vegetation indices, and generating informative visualizations.
+
+```python
+import RSensePy
+RSensePy.help()
+
+# Create RSensePy Image Object
+RSensePyObj = RSensePy.L8("path//to//the//Landsat8//Image//Folder")
+```
+## Getting Image Metadata
+Once the RSensePy object created users can get meta data by calling the meta function.
+```python
+RSensePyObj.meta()
+```
+
+## Index calculation basics
+### Features
+
+- **Cloud Masking:** RSensePy incorporates cloud masking capabilities, allowing accurate NDVI computation by accounting for cloudy regions within satellite imagery.
+
+- **Save Location:** Users can conveniently specify the directory where computed NDVI outputs will be saved, promoting organized data management and easy access for further analysis.
+
+- **AOI Integration:** The package seamlessly integrates shapefiles or Bounding box for targeted analysis. By providing a shapefile location, users can focus computation on specific geographic regions, enhancing analysis precision.
+
+- **Optional Visualization:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
+
+- **Custom normalized difference calculation:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
+
+```python
+# Clip the Image with external shapefile
+# If cloud masking is required, set the cloud parameter to True, else False
+# If visualization is required, set the visualise parameter to True, else False
+RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", shp_location="shapefile/location/path", visualise=False)
+```
+```python
+# Clip the Image with bounding box coordinated
+# bbox = [minX, minY, maxX, maxY]
+bbox = [13.490206, 48.3355,14.076421, 48.007881]
+RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", bbcoord=bbox, visualise=False)
+```
+## Supported Indices and Object Methods
+
+- **Normalized Difference Vegetation Index (NDVI):** `NDVI()`
+- **Enhanced Vegetation Index (EVI):** `EVI()`
+- **Normalized Difference Water Index (NDWI):** `NDWI()`
+- **Normalized Burn Ratio (NBR):** `NBR()`
+- **Normalized Difference Built-Up Index (NDBI):** `NDBI()`
+- **Green Normalized Difference Vegetation Index (GNDVI):** `GNDVI()`
+- **Green Leaf Index (GLI):** `GLI()`
+- **Soil Adjusted Vegetation Index (SAVI):** `SAVI()`
+- **Green Soil Adjusted Vegetation Index (GSAVI):** `GSAVI()`
+- **Green Chlorophyll Index (GLI):** `GLI()`
+- **Visible Atmospherically Resistant Index (VARI):** `VARI()`
+
+## Example Usage
+
+```python
+import RSensePy
+
+# Load image and initialize ImageObject (similar to previous example)
+image = RSensePy.L8("path//to//the//Landsat8//Image//Folder")
+
+# Calculate NDVI using RSensePy
+image.NDVI(cloud=True, save_location=output_location, shp_location=shapefile_location, visualise=False)
+
+# Calculate EVI using RSensePy
+image.EVI(cloud=True, save_location=output_location, shp_location=shapefile_location, visualise=False)
+
+# Calculate NDWI using RSensePy
+image.NDWI(cloud=True, save_location=output_location, shp_location=shapefile_location, visualise=False)
+
+# ... Repeat for other indices ...
+```
+
+## Calculate Normalised Difference between two bands
+Below example shows how to calculate normalised difference between band 4 and band 5
+```python
+import RSensePy
+# Access individual Landsat bands using object attributes
+band1 = RSensePyObj.b1
+band2 = RSensePyObj.b2
+...
+...
+band6 = RSensePyObj.b6
+band7 = RSensePyObj.b7
+
+RSensePyObj.norm_dif(cloud=True, save_location=output/Location/path,shp_location=shapefile/location/path, band1= RSensePyObj.b4, band2= RSensePyObj.b5, visualise=True)
+```
+
+## Get capabilities of the RSensePy
+Provide information about which Indexes can be calculated. Note - At the moment only Landsat 8 images are supported.
+```python
+import RSensePy
+RSensePy.getCapabilities()
+```
+
+
 
 ## Contributing
 

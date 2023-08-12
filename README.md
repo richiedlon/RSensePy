@@ -101,6 +101,7 @@ image.NDWI(cloud=True, save_location=output_location, shp_location=shapefile_loc
 ## Calculate Normalised Difference between two bands
 Below example shows how to calculate normalised difference between band 4 and band 5
 ```python
+import RSensePy
 # Access individual Landsat bands using object attributes
 band1 = RSensePyObj.b1
 band2 = RSensePyObj.b2
@@ -115,6 +116,7 @@ RSensePyObj.norm_dif(cloud=True, save_location=output/Location/path,shp_location
 ## Get capabilities of the RSensePy
 Provide information about which Indexes can be calculated. Note - At the moment only Landsat 8 images are supported.
 ```python
+import RSensePy
 RSensePy.getCapabilities()
 ```
 
