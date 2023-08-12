@@ -64,21 +64,45 @@ RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", shp_location=
 bbox = [13.490206, 48.3355,14.076421, 48.007881]
 RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", bbcoord=bbox, visualise=False)
 ```
-### Indexes that can be calculated 
-Normalized Difference Vegetation Index (NDVI)
-Enhanced Vegetation Index(EVI)
-Normalized Differnce Water Index(NDWI)
-Normalized Burn Ratio(NBR)
-Normalized Difference Built-Up Index(NDBI)
-Green Normalised Difference Vegeation Index(GNDVI)
-Green Leaf Index(GLI)
-Soil Adjusted Vegetation Index (SAVI)
-Green Soild Adjusted Vegetation Index(GSAVI)
-Green Chlorophyll Index(GLI)
-Visible Atmospherically Resistant Index (VARI)
+## Supported Indices and Object Methods
 
+- **Normalized Difference Vegetation Index (NDVI):** `NDVI()`
+- **Enhanced Vegetation Index (EVI):** `EVI()`
+- **Normalized Difference Water Index (NDWI):** `NDWI()`
+- **Normalized Burn Ratio (NBR):** `NBR()`
+- **Normalized Difference Built-Up Index (NDBI):** `NDBI()`
+- **Green Normalized Difference Vegetation Index (GNDVI):** `GNDVI()`
+- **Green Leaf Index (GLI):** `GLI()`
+- **Soil Adjusted Vegetation Index (SAVI):** `SAVI()`
+- **Green Soil Adjusted Vegetation Index (GSAVI):** `GSAVI()`
+- **Green Chlorophyll Index (GLI):** `GLI()`
+- **Visible Atmospherically Resistant Index (VARI):** `VARI()`
 
+## Example Usage
 
+```python
+import RSensePy
+
+# Load image and initialize ImageObject (similar to previous example)
+image = RSensePy.ImageObject(b1_path='path_to_band1.tif', b2_path='path_to_band2.tif', ...)
+
+# Calculate NDVI using RSensePy
+ndvi_result = image.NDVI(cloud=True, save_location=output_location, shp_location=shapefile_location, visualise=False)
+
+# Calculate EVI using RSensePy
+evi_result = image.EVI(cloud=True, save_location=output_location, shp_location=shapefile_location, visualise=False)
+
+# Calculate NDWI using RSensePy
+ndwi_result = image.NDWI(cloud=True, save_location=output_location, shp_location=shapefile_location, visualise=False)
+
+# ... Repeat for other indices ...
+
+# Access the calculated index results
+print("NDVI result:", ndvi_result)
+print("EVI result:", evi_result)
+print("NDWI result:", ndwi_result)
+# ... Repeat for other indices ...
+```
 ## Calculate Normalised Difference between two bands
 Below example shows how to calculate normalised difference between band 4 and band 5
 ```bash
