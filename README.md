@@ -24,7 +24,49 @@ pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/si
 
 ## Getting Started
 
-Once the package is installed, check out the [example notebook](https://github.com/your_username/vegetation_index_calculation/blob/main/examples/vegetation_index_calculation_example.ipynb) to get started with vegetation index calculation and visualization. The notebook provides step-by-step guidance on loading satellite imagery, calculating vegetation indices, and generating informative visualizations.
+Once the package is installed, check out the [example notebook](https://github.com/richiedlon/SoftwareDevProject/RSensePy_example.ipynb) to get started with vegetation index calculation and visualization. The notebook provides step-by-step guidance on loading satellite imagery, calculating vegetation indices, and generating informative visualizations.
+
+```bash
+import RSensePy
+RSensePy.help()
+
+# Create RSensePy Image Object
+RSensePyObj = RSensePy.L8("path//to//the//Landsat8//Image//Folder")
+```
+## Getting Image Metadata
+Once the RSensePy object created users can get meta data by calling the meta function.
+```bash
+imgobj.meta()
+```
+
+## Index calculation basics
+# Features
+
+- **Cloud Masking:** RSensePy incorporates cloud masking capabilities, allowing accurate NDVI computation by accounting for cloudy regions within satellite imagery.
+
+- **Save Location:** Users can conveniently specify the directory where computed NDVI outputs will be saved, promoting organized data management and easy access for further analysis.
+
+- **AOI Integration:** The package seamlessly integrates shapefiles or Bounding box for targeted analysis. By providing a shapefile location, users can focus computation on specific geographic regions, enhancing analysis precision.
+
+- **Optional Visualization:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
+
+```bash
+# Clip the Image with external shapefile
+RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, shp_location=shapefile/location/path, visualise=False)
+```
+```bash
+# Clip the Image with bounding box coordinated
+bbox = [13.490206, 48.3355,14.076421, 48.007881]
+RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, bbcoord=bbox, visualise=False)
+```
+
+## Get capabilities of the RSensePy
+Provide information about which Indexes can be calculated. Note - At the moment only Landsat 8 images are supported.
+```bash
+RSensePy.getCapabilities()
+```
+
+
 
 ## Contributing
 
