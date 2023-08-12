@@ -36,11 +36,11 @@ RSensePyObj = RSensePy.L8("path//to//the//Landsat8//Image//Folder")
 ## Getting Image Metadata
 Once the RSensePy object created users can get meta data by calling the meta function.
 ```bash
-imgobj.meta()
+RSensePyObj.meta()
 ```
 
 ## Index calculation basics
-# Features
+### Features
 
 - **Cloud Masking:** RSensePy incorporates cloud masking capabilities, allowing accurate NDVI computation by accounting for cloudy regions within satellite imagery.
 
@@ -50,6 +50,8 @@ imgobj.meta()
 
 - **Optional Visualization:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
 
+- **Custom normalized difference calculation:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
+
 ```bash
 # Clip the Image with external shapefile
 RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, shp_location=shapefile/location/path, visualise=False)
@@ -58,6 +60,20 @@ RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, shp_location=sh
 # Clip the Image with bounding box coordinated
 bbox = [13.490206, 48.3355,14.076421, 48.007881]
 RSensePyObj.NDVI(cloud=True, save_location=output/Location/path, bbcoord=bbox, visualise=False)
+```
+
+## Calculate Normalised Difference between two bands
+Below example shows how to calculate normalised difference between band 2 and band 6
+```bash
+# Access individual Landsat bands using object attributes
+band1 = RSensePyObj.b1
+band2 = RSensePyObj.b2
+...
+...
+band6 = RSensePyObj.b6
+band7 = RSensePyObj.b7
+
+RSensePyObj.norm_dif(cloud=True, save_location=output/Location/path,shp_location=shapefile/location/path, band1= RSensePyObj.b4, RSensePyObj=geopy.b5, visualise=True)
 ```
 
 ## Get capabilities of the RSensePy
