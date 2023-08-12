@@ -12,6 +12,8 @@ nir_band = geopy.b5
 # maxx, maxy = 14.076421, 48.007881
 bbox = [13.490206, 48.3355,14.076421,48.007881]
 
+RSensePy.getCapabilities()
+
 shpLocation1= "AOI/AOI.shp"
 shpLocation= "AOI/AOI.shp"
 outputLocation1 = "output/NDVI4.tif"
