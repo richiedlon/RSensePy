@@ -18,7 +18,7 @@ def getCapabilities():
 				Select your satellite type below to get a list of available satellite-specific indices on RsensePy.
 
 				What imagery are you working with today? 
-				Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery. 
+				Please type 8 for Landsat8 Imagery or 2 for Sentinel 2 Imagery. Sentinel 2 methods are still under development
 				""")
     if answer == "8":
         satellite = "Landsat 8"
@@ -34,7 +34,6 @@ def getCapabilities():
         Green Soild Adjusted Vegetation Index(GSAVI)
         Green Chlorophyll Index(GLI)
         Visible Atmospherically Resistant Index (VARI)""")
-        print("To initiate your Landsat8 imagery for use with RsensPy, please run the L8 class using the file name as input. Then get the metadata by calling the meta() method")
     elif answer == "2":
         satellite = "Sentinel 2"
         print(f"""With your Sentinel {answer} imagery, you can run the following indices:
