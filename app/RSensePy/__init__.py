@@ -706,7 +706,9 @@ class S2:
 		# assign the appropriate files to their respective band variables
 
 		for item in tif_files:
-			BandNum = item[-7:-4]
+			print(item)
+			BandNum = item[-11:-8]
+			print(BandNum)
 			if BandNum == "B01":
 				B1=item
 			elif BandNum=='B02':
