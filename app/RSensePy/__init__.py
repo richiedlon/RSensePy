@@ -67,21 +67,28 @@ Step 2 - Create an object from S2 (For Sentinel 2 image) or L8 class (For Landsa
 LS8Image = rp.L8("path/to/the/imagebandfolder") 
 S2Image = rp.S2("path/to/the/imagebandfolder")
 
-### Getting basic metadata of the image ####
-Call meta() method from L2 or S8 class -- sample below
-LS8Image.meta()
-S2Image.meta()
+Step 3 - Define a variable to save the location of the output file with .tif extension
+samplelocation = path/to/the/save/location/with/.tif extension
+
+Step 4 - Initialise a variable to define AOI to clip the output
+Method 1 - Using boundingbox
+	bbox = [13.490206, 48.3355, 14.076421, 48.007881]  # [minX, minY, maxX, maxY] - In WGS 1984 coordinates
+Method 2 - Using a shapefile
+	sampleshpLocation = "path/to/the/shp/location/with/.shp extension"
+
+Once above steps are completed you can call individual index functions and calculate as you wish
 
 ### Calculating Indices ####
-NDVI calculation -- sample below
+NDVI calculation -- sample below 
+
 LS8Image.NDVI(cloud=True, save_location=samplelocation ,shp_location=sampleshpLocation, visualise=False)
 S2Image.NDVI(save_location=samplelocation,shp_location=sampleshpLocation, visualise=False)
 
 Normalized difference between any 2 bands -- sample below
-LS8Image.norm_dif(cloud=False, save_location=outputLocation1, bbcoord=bbox, band1= LS8Image.b4, band2=LS8Image.b5, visualise=True)
+LS8Image.norm_dif(cloud=False, save_location=samplelocation, bbcoord=bbox, band1= LS8Image.b4, band2=LS8Image.b5, visualise=True)
 
 
-Please refer to the github readme or pypi package page for more details on index calculation
+Please refer to the github readme or pypi package page for more details on available indexes for calculation
 """)
 	
 
