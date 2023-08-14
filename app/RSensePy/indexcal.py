@@ -21,3 +21,18 @@ outputLocation1 = "output/NDVI4.tif"
 #geopy.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=False)
 geopy.NDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 geopy.meta()
+
+
+"""S2 test code....no cloud masking function, and make sure your bbox is within your S2 image"""
+# geopy.NDVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.EVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.NDRE(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.NDWI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.NBR(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.GNDVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.GLI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.SAVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.GSAVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.GCI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.RECI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+# geopy.VARI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
