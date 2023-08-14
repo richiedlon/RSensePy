@@ -51,7 +51,7 @@ def getCapabilities():
         Red-Edge Chlorophyll Index(ReCI)
 	    Normalized Difference Red-Edge (NDRE)
         Visible Atmospherically Resistant Index (VARI)""")
-        print("To initiate your Sentinel2 imagery for use with RsensPy, please run the S2 class using the file name as input. Then get the metadata by calling the meta() method")
+        print("To initialize your Sentinel2 imagery for use with RsensPy, please run the S2 class using the file name as input. Then get the metadata by calling the meta() method")
     else: 
         answer != "8" and "2"
         print("Please rerun and input the appropriate value")
@@ -77,7 +77,7 @@ NDVI calculation -- sample below
 LS8Image.NDVI(cloud=True, save_location=samplelocation ,shp_location=sampleshpLocation, visualise=False)
 S2Image.NDVI(save_location=samplelocation,shp_location=sampleshpLocation, visualise=False)
 
-Normalized difference between any 2 bands
+Normalized difference between any 2 bands -- sample below
 LS8Image.norm_dif(cloud=False, save_location=outputLocation1, bbcoord=bbox, band1= LS8Image.b4, band2=LS8Image.b5, visualise=True)
 
 
