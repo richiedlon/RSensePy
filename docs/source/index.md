@@ -23,7 +23,7 @@ Welcome to the Vegetation Index Calculation Python Package! This package provide
 - **Data Preprocessing:** The package offers data preprocessing utilities, including AOI masking and cloud masking, to ensure the quality of input satellite imagery before index calculation.
 
 ```{warning}
-The library is under heavy development.
+The library is under heavy development. Cloud masking of Sentinel 2 is not yet implemented.
 ```
 
 
