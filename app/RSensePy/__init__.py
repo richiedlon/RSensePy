@@ -193,12 +193,37 @@ class L8:
 		normDifVal = numerator / denominator
 		return normDifVal
 
-	def visualiseFunc(self, normDifVal, title):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(normDifVal.squeeze(), cmap='gray')
-		plt.title(title)
-		plt.colorbar()
-		plt.show()
+	def visualiseFunc(self, normDifVal, title, outlier_percentage=1):
+	    # Calculate the mean and standard deviation of the data
+	    mean_val = np.mean(normDifVal)
+	    std_val = np.std(normDifVal)
+	    
+	    # Define the color map ranging from red to green
+	    cmap = plt.cm.RdYlGn
+	    
+	    # Calculate the thresholds for outliers
+	    lower_threshold = mean_val - std_val
+	    upper_threshold = mean_val + std_val
+	    
+	    # Clip the data to remove outliers
+	    clipped_data = np.clip(normDifVal, lower_threshold, upper_threshold)
+	    
+	    # Create a masked array to omit outliers from the colormap normalization
+	    masked_data = np.ma.masked_where(
+	        (clipped_data < lower_threshold) | (clipped_data > upper_threshold),
+	        clipped_data
+	    )
+	    
+	    # Create the figure and plot the data using the color map
+	    plt.figure(figsize=(10, 10))
+	    im = plt.imshow(masked_data.squeeze(), cmap=cmap)
+	    
+	    # Set the title and color bar
+	    plt.title(title)
+	    plt.colorbar(im, label='Original Values')
+	    
+	    # Show the plot
+	    plt.show()
 
 	def norm_dif(self, cloud, save_location, shp_location=None, bbcoord=None, band1=None, band2=None, visualise=False, title = "Visualization of Normalized Difference"):		
 		if cloud ==False and (bbcoord is None):
@@ -713,9 +738,7 @@ class S2:
 		# assign the appropriate files to their respective band variables
 
 		for item in tif_files:
-			print(item)
 			BandNum = item[-11:-8]
-			print(BandNum)
 			if BandNum == "B01":
 				B1=item
 			elif BandNum=='B02':
@@ -802,11 +825,32 @@ class S2:
 		return normDifVal
 
 	def visualiseFunc(self, normDifVal, title):
-		plt.figure(figsize=(10, 10))
-		plt.imshow(normDifVal.squeeze(), cmap='gray')
-		plt.title(title)
-		plt.colorbar()
-		plt.show()
+		if title=="Enhanced Vegetation Index":
+		    # Calculate the 2nd and 98th percentiles to identify outliers
+		    percentile_2 = np.percentile(normDifVal, 2)
+		    percentile_98 = np.percentile(normDifVal, 98)
+
+		    # Clip the data to remove outliers
+		    clipped_normDifVal = np.clip(normDifVal, percentile_2, percentile_98)
+
+		    # Normalize the data between 0 and 1
+		    normalized_clipped_normDifVal = (clipped_normDifVal - percentile_2) / (percentile_98 - percentile_2)
+
+		    # Create a colormap that goes from red to green
+		    cmap = plt.cm.get_cmap('RdYlGn')
+
+		    plt.figure(figsize=(10, 10))
+		    plt.imshow(normalized_clipped_normDifVal.squeeze(), cmap=cmap)
+		    plt.title(title)
+		    plt.colorbar()
+		    plt.show()
+		else:
+			plt.figure(figsize=(10, 10))
+			plt.imshow(normDifVal.squeeze(), cmap='RdYlGn')
+			plt.title(title)
+			plt.colorbar()
+			plt.show()
+
 
 	def norm_dif(self, save_location, shp_location=None, bbcoord=None, band1=None, band2=None, visualise=False, title = "Visualization of Normalized Difference"):		
 		if bbcoord is None:

@@ -1,5 +1,5 @@
 import os
-import app.RSensePy as rp
+import RSensePy as rp
 
 
 bboxs2 = [-56.963013,-15.392013,-56.783112,-15.225825]
@@ -20,7 +20,8 @@ outputLocation1 = "output/S2NDV1.tif"
 # geopy = L8("LC08_L2SP_191027_20220720_20220726_02_T1")
 geopy = rp.S2("S2A_MSIL2A_20230715T135711_N0509_R067_T21LWD_20230715T212203.SAFE")
 
-geopy.NDVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
+
+# geopy.NDVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
 geopy.EVI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
 #geopy.NDRE(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
 # geopy.NDWI(save_location=outputLocation1,bbcoord=bboxs2, visualise=True)
