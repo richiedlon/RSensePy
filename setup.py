@@ -25,7 +25,7 @@ setup(
 		"twine>=4.0.2", 
 		"sphinx>=4.2.0",
 		"myst-parser",
-		"furo"],
+		"sphinx_rtd_theme"],
 	},
 	python_requires=">=3.9.16",
 
