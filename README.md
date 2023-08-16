@@ -1,6 +1,6 @@
 **Satellite Image Index Calculation Python Package**
 
-![Vegetation Index Calculation](https://github.com/richiedlon/SoftwareDevProject/blob/main/package_logo.png)
+![Vegetation Index Calculation](https://i.ibb.co/mHsrnRt/package-logo.png)
 
 Welcome to the Vegetation Index Calculation Python Package! This package provides advanced features for calculating various vegetation indices from satellite imagery, allowing users to efficiently analyze vegetation patterns and dynamics. Whether you are a researcher, a data scientist, or an environmental enthusiast, this package will empower you to gain valuable insights into vegetation health and distribution.
 
