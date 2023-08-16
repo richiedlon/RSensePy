@@ -19,7 +19,7 @@ Welcome to the Vegetation Index Calculation Python Package! This package provide
 To install the Vegetation Index Calculation package, you can use pip:
 
 ```bash
-pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/simple RSensePy
+pip install RSensePy
 ```
 
 ## Getting Started
