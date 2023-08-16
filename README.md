@@ -78,7 +78,7 @@ RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", bbcoord=bbox,
 - **Green Chlorophyll Index (GLI):** `GLI()`
 - **Visible Atmospherically Resistant Index (VARI):** `VARI()`
 
-## Example Usage
+## Example Usages
 
 ```python
 import RSensePy
