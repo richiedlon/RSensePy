@@ -757,7 +757,9 @@ class S2:
 		self.TCI= TCI
 		self.WVP= WVP
 
-	#Defining the metadata
+
+	# METADATA
+
 		basename = os.path.basename(directory) #where directory is the path to the S2 data folder
 		namelist=[]
 
@@ -778,7 +780,7 @@ class S2:
 		self.prod_descript=listprod[0]
 		self.prod_format=listprod[1]  
 
-	# METADATA
+	
 	def meta(self):
 		print(f"""\n
 					Mission = {self.mission}\n 
@@ -886,9 +888,9 @@ class S2:
 		args are nir (first position) and red(second position) and blue (third position) values. 
 		
 		Optional params and default values
-		G = 2.5,
-		L = 1,
-		C1 = 6,
+		G = 2.5, G is Gain Factor
+		L = 1, 
+		C1 = 6, 
 		C2 = 7.5,
 
 		Formula
