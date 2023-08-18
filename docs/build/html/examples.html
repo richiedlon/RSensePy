@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example Usage &mdash; RSensePy 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing and Bug Reports" href="contribute.html" />
+    <link rel="prev" title="Index calculation basics" href="indexcalbasics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            RSensePy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">RSensePy Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexcalbasics.html">Index calculation basics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#additional-usage">Additional usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normalised-difference-between-two-bands">Normalised Difference between two bands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing and Bug Reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RSensePy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="example-usage">
+<h1>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h1>
+<p>Clip the output from an external shapefile</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clip the Image with external shapefile</span>
+<span class="c1"># If cloud masking is required, set the cloud parameter to True, else False</span>
+<span class="c1"># If visualization is required, set the visualise parameter to True, else False</span>
+<span class="kn">import</span> <span class="nn">RSensePy</span>
+<span class="n">RSensePyObj</span> <span class="o">=</span> <span class="n">RSensePy</span><span class="o">.</span><span class="n">L8</span><span class="p">(</span><span class="s2">&quot;path//to//the//Landsat8//Image//Folder&quot;</span><span class="p">)</span>
+<span class="n">location_shapefile</span> <span class="o">=</span> <span class="s2">&quot;shapefile/location/path&quot;</span>
+
+<span class="n">RSensePyObj</span><span class="o">.</span><span class="n">NDVI</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_location</span><span class="o">=</span><span class="s2">&quot;output/Location/path&quot;</span><span class="p">,</span> <span class="n">shp_location</span><span class="o">=</span><span class="s2">&quot;location_shapefile&quot;</span><span class="p">,</span> <span class="n">visualise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Clip the output from a bounding box</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clip the Image with bounding box coordinated</span>
+<span class="c1"># bbox = [minX, minY, maxX, maxY]</span>
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="mf">13.490206</span><span class="p">,</span> <span class="mf">48.3355</span><span class="p">,</span><span class="mf">14.076421</span><span class="p">,</span> <span class="mf">48.007881</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">RSensePy</span>
+<span class="n">RSensePyObj</span> <span class="o">=</span> <span class="n">RSensePy</span><span class="o">.</span><span class="n">L8</span><span class="p">(</span><span class="s2">&quot;path//to//the//Landsat8//Image//Folder&quot;</span><span class="p">)</span>
+<span class="n">location_shapefile</span> <span class="o">=</span> <span class="s2">&quot;shapefile/location/path&quot;</span>
+
+<span class="n">RSensePyObj</span><span class="o">.</span><span class="n">NDVI</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_location</span><span class="o">=</span><span class="s2">&quot;output/Location/path&quot;</span><span class="p">,</span> <span class="n">bbcoord</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="n">visualise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="additional-usage">
+<h2>Additional usage<a class="headerlink" href="#additional-usage" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">RSensePy</span>
+
+<span class="c1"># Load image and initialize ImageObject (similar to previous example)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">RSensePy</span><span class="o">.</span><span class="n">L8</span><span class="p">(</span><span class="s2">&quot;path//to//the//Landsat8//Image//Folder&quot;</span><span class="p">)</span>
+
+<span class="c1"># Calculate NDVI using RSensePy</span>
+<span class="n">image</span><span class="o">.</span><span class="n">NDVI</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_location</span><span class="o">=</span><span class="n">output_location</span><span class="p">,</span> <span class="n">shp_location</span><span class="o">=</span><span class="n">shapefile_location</span><span class="p">,</span> <span class="n">visualise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Calculate EVI using RSensePy</span>
+<span class="n">image</span><span class="o">.</span><span class="n">EVI</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_location</span><span class="o">=</span><span class="n">output_location</span><span class="p">,</span> <span class="n">shp_location</span><span class="o">=</span><span class="n">shapefile_location</span><span class="p">,</span> <span class="n">visualise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Calculate NDWI using RSensePy</span>
+<span class="n">image</span><span class="o">.</span><span class="n">NDWI</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_location</span><span class="o">=</span><span class="n">output_location</span><span class="p">,</span> <span class="n">shp_location</span><span class="o">=</span><span class="n">shapefile_location</span><span class="p">,</span> <span class="n">visualise</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># ... Repeat for other indices ...</span>
+</pre></div>
+</div>
+</section>
+<section id="normalised-difference-between-two-bands">
+<h2>Normalised Difference between two bands<a class="headerlink" href="#normalised-difference-between-two-bands" title="Permalink to this heading"></a></h2>
+<p>Below example shows how to calculate normalised difference between band 4 and band 5</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">RSensePy</span>
+<span class="c1"># Access individual Landsat bands </span>
+<span class="n">band1</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">b1</span>
+<span class="n">band2</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">b2</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">band6</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">b6</span>
+<span class="n">band7</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">b7</span>
+
+<span class="c1"># Access individual Sentinel 2 bands </span>
+<span class="n">band1</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">B1</span>
+<span class="n">band2</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">B2</span>
+<span class="o">...</span>
+<span class="o">...</span>
+<span class="n">band6</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">B6</span>
+<span class="n">band7</span> <span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">B7</span>
+
+
+<span class="n">RSensePyObj</span><span class="o">.</span><span class="n">norm_dif</span><span class="p">(</span><span class="n">cloud</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_location</span><span class="o">=</span><span class="n">output</span><span class="o">/</span><span class="n">Location</span><span class="o">/</span><span class="n">path</span><span class="p">,</span><span class="n">shp_location</span><span class="o">=</span><span class="n">shapefile</span><span class="o">/</span><span class="n">location</span><span class="o">/</span><span class="n">path</span><span class="p">,</span> <span class="n">band1</span><span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">b4</span><span class="p">,</span> <span class="n">band2</span><span class="o">=</span> <span class="n">RSensePyObj</span><span class="o">.</span><span class="n">b5</span><span class="p">,</span> <span class="n">visualise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="indexcalbasics.html" class="btn btn-neutral float-left" title="Index calculation basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contribute.html" class="btn btn-neutral float-right" title="Contributing and Bug Reports" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, E.M.R.D Ekanayaka Opeyemi Kazeem-Jimoh.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

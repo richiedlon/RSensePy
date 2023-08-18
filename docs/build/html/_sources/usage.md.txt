@@ -1,0 +1,8 @@
+# Getting started
+
+To install RSensePy:
+
+```console
+(.venv) $ pip install RSensePy
+```
+

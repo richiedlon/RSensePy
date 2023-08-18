@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: RSensePy
-Version: 0.0.5
+Version: 0.0.2
 Summary: Biophysical parameter calculator for Landsat 8 data
 Home-page: https://github.com/richiedlon/SoftwareDevProject
 Author: richiedlon/opeyami
@@ -10,7 +10,7 @@ Description-Content-Type: text/markdown
 
 **Satellite Image Index Calculation Python Package**
 
-![Vegetation Index Calculation](https://github.com/richiedlon/SoftwareDevProject/blob/main/package_logo.png)
+![Vegetation Index Calculation](https://i.ibb.co/mHsrnRt/package-logo.png)
 
 Welcome to the Vegetation Index Calculation Python Package! This package provides advanced features for calculating various vegetation indices from satellite imagery, allowing users to efficiently analyze vegetation patterns and dynamics. Whether you are a researcher, a data scientist, or an environmental enthusiast, this package will empower you to gain valuable insights into vegetation health and distribution.
 
@@ -29,7 +29,7 @@ Welcome to the Vegetation Index Calculation Python Package! This package provide
 To install the Vegetation Index Calculation package, you can use pip:
 
 ```bash
-pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/simple RSensePy
+pip install RSensePy
 ```
 
 ## Getting Started
