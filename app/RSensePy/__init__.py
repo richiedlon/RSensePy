@@ -363,7 +363,7 @@ class L8:
 		(nir - swir)/(nir + swir)
 
 		"""
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b6, title="Normalized Burn Ratio")
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b7, title="Normalized Burn Ratio")
 
 	
 	def NDBI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
