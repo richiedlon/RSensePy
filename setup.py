@@ -5,8 +5,8 @@ with open("README.md", "r",encoding="utf8") as f:
 
 setup(
 	name = "RSensePy",
-	version = "0.0.2",
-	description = "Biophysical parameter calculator for Landsat 8 data",
+	version = "0.0.3",
+	description = "Biophysical parameter calculator for Sentinel 2 and Landsat 8,9 data",
 	package_dir ={"":"app"},
 	packages = find_packages(where="app"),
 	long_description=long_description,
