@@ -32,5 +32,5 @@ Sentinel 2 only
 
 - **The imagery files are located within the current working directory**
 - **The Sentinel 2 product folder contains only the relevant resolution folder (e.g. if 20m resolution is being used, delete the other 10 and 60 meter folders)**.
-or
+- or
 - **Extract just the relevant resolution folder into a parent folder with the same name as the downloaded sentinel 2 product**.
