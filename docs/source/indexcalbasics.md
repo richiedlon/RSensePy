@@ -25,5 +25,5 @@ Landsat 8/9 and Sentinel2
 - **Green Chlorophyll Index (GCI):** `GCI()`
 - **Visible Atmospherically Resistant Index (VARI):** `VARI()`
 
-- Sentinel 2 only
+Sentinel 2 only
 - **Red-Edge Chlorophyll Index (RECI):** `RECI()`
