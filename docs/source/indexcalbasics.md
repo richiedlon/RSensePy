@@ -12,7 +12,7 @@
 - **Custom normalized difference calculation:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
 
 ### Supported Indices and Object Methods
-Landsat 8/9 and Sentinel2
+Landsat 8/9 and Sentinel 2
 - **Normalized Difference Vegetation Index (NDVI):** `NDVI()`
 - **Enhanced Vegetation Index (EVI):** `EVI()`
 - **Normalized Difference Water Index (NDWI):** `NDWI()`
