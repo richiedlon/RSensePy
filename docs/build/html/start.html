@@ -84,7 +84,10 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import RSensePy package</span>
 <span class="kn">import</span> <span class="nn">RSensePy</span>
 
-<span class="c1"># You can also call following function and see the step by steps</span>
+<span class="c1"># Call the function below to get a list of available indices for your imagery (Indices available for Landast 8/9 and Sentinel 2 imagery)</span>
+<span class="n">RSensePy</span><span class="o">.</span><span class="n">getCapabillities</span><span class="p">()</span>
+
+<span class="c1"># Call the function below to get step by step guidiance on setup and index calculation</span>
 <span class="n">RSensePy</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
 
 <span class="c1"># Create RSensePy Image Object</span>
@@ -94,11 +97,11 @@
 </div>
 <section id="getting-image-metadata">
 <h2>Getting Image Metadata<a class="headerlink" href="#getting-image-metadata" title="Permalink to this heading"></a></h2>
-<p>Once the RSensePy object created users can get meta data by calling the meta function.</p>
+<p>Once the RSensePy object has been created, users can get metadata by calling the meta function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RSensePyObj</span><span class="o">.</span><span class="n">meta</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Check out the <a class="reference external" href="https://github.com/richiedlon/SoftwareDevProject/RSensePy_example.ipynb">example notebook</a> to get started with vegetation index calculation and visualization.</p>
+<p>Check out the <a class="reference external" href="https://github.com/richiedlon/RSensePy/blob/main/RSensePy_test.ipynb">example notebook</a> to get started with vegetation index calculation and visualization.</p>
 <p>The notebook provides step-by-step guidance on loading satellite imagery, calculating vegetation indices, and generating informative visualizations.</p>
 </section>
 </section>

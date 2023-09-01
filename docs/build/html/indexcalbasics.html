@@ -49,6 +49,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Index calculation basics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-indices-and-object-methods">Supported Indices and Object Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes-on-using-sentinel-2-imagery">Notes on using Sentinel 2 imagery</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Example Usage</a></li>
@@ -94,6 +95,7 @@
 </section>
 <section id="supported-indices-and-object-methods">
 <h2>Supported Indices and Object Methods<a class="headerlink" href="#supported-indices-and-object-methods" title="Permalink to this heading"></a></h2>
+<p>Landsat 8/9 and Sentinel 2</p>
 <ul class="simple">
 <li><p><strong>Normalized Difference Vegetation Index (NDVI):</strong> <code class="docutils literal notranslate"><span class="pre">NDVI()</span></code></p></li>
 <li><p><strong>Enhanced Vegetation Index (EVI):</strong> <code class="docutils literal notranslate"><span class="pre">EVI()</span></code></p></li>
@@ -104,8 +106,21 @@
 <li><p><strong>Green Leaf Index (GLI):</strong> <code class="docutils literal notranslate"><span class="pre">GLI()</span></code></p></li>
 <li><p><strong>Soil Adjusted Vegetation Index (SAVI):</strong> <code class="docutils literal notranslate"><span class="pre">SAVI()</span></code></p></li>
 <li><p><strong>Green Soil Adjusted Vegetation Index (GSAVI):</strong> <code class="docutils literal notranslate"><span class="pre">GSAVI()</span></code></p></li>
-<li><p><strong>Green Chlorophyll Index (GLI):</strong> <code class="docutils literal notranslate"><span class="pre">GLI()</span></code></p></li>
+<li><p><strong>Green Chlorophyll Index (GCI):</strong> <code class="docutils literal notranslate"><span class="pre">GCI()</span></code></p></li>
 <li><p><strong>Visible Atmospherically Resistant Index (VARI):</strong> <code class="docutils literal notranslate"><span class="pre">VARI()</span></code></p></li>
+</ul>
+<p>Sentinel 2 only</p>
+<ul class="simple">
+<li><p><strong>Red-Edge Chlorophyll Index (RECI):</strong> <code class="docutils literal notranslate"><span class="pre">RECI()</span></code></p></li>
+</ul>
+</section>
+<section id="notes-on-using-sentinel-2-imagery">
+<h2>Notes on using Sentinel 2 imagery<a class="headerlink" href="#notes-on-using-sentinel-2-imagery" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>The imagery files are located within the current working directory</strong></p></li>
+<li><p><strong>The Sentinel 2 product folder contains only the relevant resolution folder (e.g. if 20m resolution is being used, delete the other 10 and 60 meter folders)</strong>.
+or</p></li>
+<li><p><strong>Extract just the relevant resolution folder into a parent folder with the same name as the downloaded sentinel 2 product</strong>.</p></li>
 </ul>
 </section>
 </section>

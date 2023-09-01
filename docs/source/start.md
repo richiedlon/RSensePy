@@ -22,6 +22,6 @@ Once the RSensePy object has been created, users can get metadata by calling the
 RSensePyObj.meta()
 ```
 
-Check out the [example notebook](https://github.com/richiedlon/SoftwareDevProject/RSensePy_test.ipynb) to get started with vegetation index calculation and visualization. 
+Check out the [example notebook](https://github.com/richiedlon/RSensePy/blob/main/RSensePy_test.ipynb) to get started with vegetation index calculation and visualization. 
 
 The notebook provides step-by-step guidance on loading satellite imagery, calculating vegetation indices, and generating informative visualizations.
