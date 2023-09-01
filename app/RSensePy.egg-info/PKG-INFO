@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: RSensePy
-Version: 0.0.2
-Summary: Biophysical parameter calculator for Landsat 8 data
+Version: 0.0.4
+Summary: Biophysical parameter calculator for Sentinel 2 and Landsat 8,9 data
 Home-page: https://github.com/richiedlon/SoftwareDevProject
 Author: richiedlon/opeyami
 License: MIT
@@ -88,7 +88,7 @@ RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", bbcoord=bbox,
 - **Green Chlorophyll Index (GLI):** `GLI()`
 - **Visible Atmospherically Resistant Index (VARI):** `VARI()`
 
-## Example Usage
+## Example Usages
 
 ```python
 import RSensePy

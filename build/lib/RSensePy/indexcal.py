@@ -19,5 +19,5 @@ outputLocation1 = "output/NDVI4.tif"
 #geopy.norm_dif(cloud=True, save_location=outputLocation1,shp_location=shpLocation, band1= geopy.b4, band2=geopy.b5, visualise=True)
 #geopy.norm_dif(cloud=False, save_location=outputLocation1, bbcoord=bbox, band1= geopy.b4, band2=geopy.b5, visualise=True)
 #geopy.NDVI(cloud=True, save_location=outputLocation1,shp_location=shpLocation, visualise=False)
-geopy.NDVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
+geopy.EVI(cloud=True, save_location=outputLocation1,bbcoord=bbox, visualise=True)
 geopy.meta()

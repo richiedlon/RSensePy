@@ -5,7 +5,10 @@
 # Import RSensePy package
 import RSensePy
 
-# You can also call following function and see the step by steps
+# Call the function below to get a list of available indices for your imagery (Indices available for Landast 8/9 and Sentinel 2 imagery)
+RSensePy.getCapabillities()
+
+# Call the function below to get step by step guidiance on setup and index calaculation
 RSensePy.help()
 
 # Create RSensePy Image Object

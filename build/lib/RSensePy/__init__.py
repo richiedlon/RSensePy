@@ -9,6 +9,8 @@ from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip
 from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip_shp
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import rasterio
 
 def getCapabilities():
     answer= input("""
@@ -91,7 +93,28 @@ LS8Image.norm_dif(cloud=False, save_location=samplelocation, bbcoord=bbox, band1
 Please refer to the github readme or pypi package page for more details on available indexes for calculation
 """)
 	
+def get_difference(savelocation, visualise, image1, image2):
+	with rasterio.open(image1) as src1, rasterio.open(image2) as src2:
+		# Read the data as numpy arrays
+		data1 = src1.read(1)
+		data2 = src2.read(1)
 
+		# Calculate the difference
+		difference = data1 - data2
+
+		# Copy metadata from one of the input images (assuming they have the same georeferencing)
+		profile = src1.profile
+
+	# Write the difference to a new raster file
+	with rasterio.open(savelocation, 'w', **profile) as dst:
+	    dst.write(difference, 1)
+
+	if visualise==True:
+		plt.figure(figsize=(10, 10))
+		plt.imshow(difference.squeeze(), cmap='RdYlGn')
+		plt.title("Difference between two images")
+		plt.colorbar()
+		plt.show()
 ### Defining the Landsat 8 Class and accompanying methods
 class L8:
 	def __init__(self,directory):
@@ -195,24 +218,13 @@ class L8:
 
 	def visualiseFunc(self, normDifVal, title):
 		if title=="Enhanced Vegetation Index":
-		    # Calculate the 2nd and 98th percentiles to identify outliers
-		    percentile_2 = np.percentile(normDifVal, 2)
-		    percentile_98 = np.percentile(normDifVal, 98)
+			plt.imshow(normDifVal.squeeze(), cmap='RdYlGn',vmin=0, vmax=6)
+			plt.colorbar()  # Add a colorbar with custom boundaries
+			plt.title(title)
+			plt.text(0.5, -0.2, 'Note: Only the values between 0 and 6 are plotted to visualize', fontsize=12, color='red',
+         transform=plt.gca().transAxes, ha='center')
+			plt.show()
 
-		    # Clip the data to remove outliers
-		    clipped_normDifVal = np.clip(normDifVal, percentile_2, percentile_98)
-
-		    # Normalize the data between 0 and 1
-		    normalized_clipped_normDifVal = (clipped_normDifVal - percentile_2) / (percentile_98 - percentile_2)
-
-		    # Create a colormap that goes from red to green
-		    cmap = plt.cm.get_cmap('RdYlGn')
-
-		    plt.figure(figsize=(10, 10))
-		    plt.imshow(normalized_clipped_normDifVal.squeeze(), cmap=cmap)
-		    plt.title(title)
-		    plt.colorbar()
-		    plt.show()
 		else:
 			plt.figure(figsize=(10, 10))
 			plt.imshow(normDifVal.squeeze(), cmap='RdYlGn')
@@ -363,7 +375,7 @@ class L8:
 		(nir - swir)/(nir + swir)
 
 		"""
-		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b6, title="Normalized Burn Ratio")
+		self.norm_dif(visualise=visualise, cloud=cloud, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, band1=self.b5, band2=self.b7, title="Normalized Burn Ratio")
 
 	
 	def NDBI(self, cloud, save_location, visualise, shp_location=None, bbcoord=None):
@@ -775,7 +787,9 @@ class S2:
 		self.TCI= TCI
 		self.WVP= WVP
 
-	#Defining the metadata
+
+	# METADATA
+
 		basename = os.path.basename(directory) #where directory is the path to the S2 data folder
 		namelist=[]
 
@@ -796,7 +810,7 @@ class S2:
 		self.prod_descript=listprod[0]
 		self.prod_format=listprod[1]  
 
-	# METADATA
+	
 	def meta(self):
 		print(f"""\n
 					Mission = {self.mission}\n 
@@ -925,9 +939,9 @@ class S2:
 		args are nir (first position) and red(second position) and blue (third position) values. 
 		
 		Optional params and default values
-		G = 2.5,
-		L = 1,
-		C1 = 6,
+		G = 2.5, G is Gain Factor
+		L = 1, 
+		C1 = 6, 
 		C2 = 7.5,
 
 		Formula
@@ -1199,4 +1213,3 @@ class S2:
 		"""
 		self.visibleARI(visualise=visualise, save_location=save_location, shp_location=shp_location, bbcoord=bbcoord, green=self.B3, red=self.B4, blue=self.B2)
 
-	

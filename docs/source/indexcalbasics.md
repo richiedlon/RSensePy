@@ -12,7 +12,7 @@
 - **Custom normalized difference calculation:** RSensePy provides an optional visualization feature, enabling users to visualize the calculated NDVI outputs spatially and gain insights into vegetation health distribution in grayscale.
 
 ### Supported Indices and Object Methods
-
+Landsat 8/9 and Sentinel 2
 - **Normalized Difference Vegetation Index (NDVI):** `NDVI()`
 - **Enhanced Vegetation Index (EVI):** `EVI()`
 - **Normalized Difference Water Index (NDWI):** `NDWI()`
@@ -22,5 +22,15 @@
 - **Green Leaf Index (GLI):** `GLI()`
 - **Soil Adjusted Vegetation Index (SAVI):** `SAVI()`
 - **Green Soil Adjusted Vegetation Index (GSAVI):** `GSAVI()`
-- **Green Chlorophyll Index (GLI):** `GLI()`
+- **Green Chlorophyll Index (GCI):** `GCI()`
 - **Visible Atmospherically Resistant Index (VARI):** `VARI()`
+
+Sentinel 2 only
+- **Red-Edge Chlorophyll Index (RECI):** `RECI()`
+
+### Notes on using Sentinel 2 imagery
+
+- **The imagery files are located within the current working directory**
+- **The Sentinel 2 product folder contains only the relevant resolution folder (e.g. if 20m resolution is being used, delete the other 10 and 60 meter folders)**.
+ or
+- **Extract just the relevant resolution folder into a parent folder with the same name as the downloaded sentinel 2 product**.
