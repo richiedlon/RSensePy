@@ -9,6 +9,7 @@ from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip
 from RSensePy.cloudMask_clip import cloud_mask_landsat8_clip_shp
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import rasterio
 
 def getCapabilities():
@@ -217,24 +218,13 @@ class L8:
 
 	def visualiseFunc(self, normDifVal, title):
 		if title=="Enhanced Vegetation Index":
-		    # Calculate the 2nd and 98th percentiles to identify outliers
-		    percentile_2 = np.percentile(normDifVal, 2)
-		    percentile_98 = np.percentile(normDifVal, 98)
+			plt.imshow(normDifVal.squeeze(), cmap='RdYlGn',vmin=0, vmax=6)
+			plt.colorbar()  # Add a colorbar with custom boundaries
+			plt.title(title)
+			plt.text(0.5, -0.2, 'Note: Only the values between 0 and 6 are plotted to visualize', fontsize=12, color='red',
+         transform=plt.gca().transAxes, ha='center')
+			plt.show()
 
-		    # Clip the data to remove outliers
-		    clipped_normDifVal = np.clip(normDifVal, percentile_2, percentile_98)
-
-		    # Normalize the data between 0 and 1
-		    normalized_clipped_normDifVal = (clipped_normDifVal - percentile_2) / (percentile_98 - percentile_2)
-
-		    # Create a colormap that goes from red to green
-		    cmap = plt.cm.get_cmap('RdYlGn')
-
-		    plt.figure(figsize=(10, 10))
-		    plt.imshow(normalized_clipped_normDifVal.squeeze(), cmap=cmap)
-		    plt.title(title)
-		    plt.colorbar()
-		    plt.show()
 		else:
 			plt.figure(figsize=(10, 10))
 			plt.imshow(normDifVal.squeeze(), cmap='RdYlGn')
