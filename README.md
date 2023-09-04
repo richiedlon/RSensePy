@@ -75,7 +75,8 @@ RSensePyObj.NDVI(cloud=True, save_location="output/Location/path", bbcoord=bbox,
 - **Green Leaf Index (GLI):** `GLI()`
 - **Soil Adjusted Vegetation Index (SAVI):** `SAVI()`
 - **Green Soil Adjusted Vegetation Index (GSAVI):** `GSAVI()`
-- **Green Chlorophyll Index (GLI):** `GLI()`
+- **Green Chlorophyll Index (GCI):** `GCI()`
+- **Red-Edge Chlorophyll Index (RECI):** `RECI()`
 - **Visible Atmospherically Resistant Index (VARI):** `VARI()`
 
 ## Example Usages
@@ -114,7 +115,7 @@ RSensePyObj.norm_dif(cloud=True, save_location=output/Location/path,shp_location
 ```
 
 ## Get capabilities of the RSensePy
-Provide information about which Indexes can be calculated. Note - At the moment only Landsat 8 images are supported.
+Provide information about which Indexes can be calculated. Note - At the moment only Landsat 8 and Sentinel 2 images are supported.
 ```python
 import RSensePy
 RSensePy.getCapabilities()
